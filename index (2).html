@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>形象情报 · Founder IP Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F5F1;--surface:#FFFFFF;--ink:#17181B;--ink-soft:#54565C;--ink-faint:#8C8E95;
+  --line:#E4E5DF;--line-strong:#D2D3CC;--accent:#3B36C9;--accent-soft:#ECEBFB;--accent-ink:#241F8C;
+  --strength:#1C7A56;--gap:#B0530A;--gap-soft:#FBEDDF;--internal:#7A3CA8;--internal-soft:#F3EBFA;
+  --display:'Space Grotesk','Noto Sans SC',ui-sans-serif,system-ui,sans-serif;
+  --body:'Noto Sans SC',ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}input,textarea,select{font-family:inherit}
+
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 26px;background:rgba(244,245,241,.88);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;gap:12px;min-width:0}
+.brand .mark{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:19px}
+.brand .mark b{color:var(--accent)}
+.brand .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);white-space:nowrap}
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.btn{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 13px;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{border-color:var(--ink)}
+.btn.ghost{background:transparent}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.primary:hover{background:var(--accent-ink)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn svg{width:14px;height:14px}
+
+.shell{max-width:1140px;margin:0 auto;padding:28px 26px 90px}
+.view{display:none}.view.on{display:block}
+
+.block{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:20px}
+.block-head{display:flex;align-items:baseline;gap:12px;margin:0 0 4px}
+.block-num{font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:600}
+.block-title{font-family:var(--display);font-size:17px;font-weight:600;margin:0}
+.block-sub{font-size:12.5px;color:var(--ink-faint);margin:4px 0 16px}
+
+.grid{display:grid;gap:13px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:640px){.g2,.g3{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11.5px;font-weight:600;color:var(--ink-soft)}
+.field input,.field select,.field textarea{border:1px solid var(--line-strong);background:#fff;border-radius:8px;padding:9px 11px;font-size:14px;color:var(--ink);width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.field textarea{resize:vertical;min-height:60px;line-height:1.45}
+
+.linkrow{display:grid;grid-template-columns:120px 1fr 88px 92px;gap:10px;align-items:center;margin-bottom:9px}
+.linkrow .pl{display:flex;align-items:center;gap:9px;font-weight:600;font-size:13.5px}
+.linkrow .badge{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:#fff;font-family:var(--display);font-weight:700;font-size:11px}
+.linkrow input{border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font-size:13px}
+.linkrow .hint{font-size:9.5px;color:var(--ink-faint);font-family:var(--mono);text-align:center}
+@media(max-width:640px){.linkrow{grid-template-columns:1fr 1fr;gap:7px}.linkrow .pl{grid-column:1/-1}}
+
+.runbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px}
+.status{font-size:13px;color:var(--ink-soft);display:flex;align-items:center;gap:9px;min-height:20px}
+.spinner{width:15px;height:15px;border:2px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.warn{background:var(--gap-soft);border:1px solid #f0d9c2;color:#7a3c08;border-radius:9px;padding:11px 14px;font-size:12.5px;line-height:1.5;margin-top:14px}
+.warn b{color:var(--gap)}
+
+.internal{border:1px dashed var(--internal);background:var(--internal-soft);border-radius:14px;padding:20px 22px;margin-bottom:20px}
+.internal .tagline{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--internal);font-weight:600;margin-bottom:12px}
+.internal .tagline .dot{width:7px;height:7px;border-radius:50%;background:var(--internal)}
+.snapshot{font-size:16px;line-height:1.55;font-weight:500;margin:0 0 6px}
+.subline{font-size:13px;color:var(--ink-soft);margin:0 0 16px}
+.prep-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.prep-grid{grid-template-columns:1fr}}
+.prep h4{font-family:var(--display);font-size:12px;letter-spacing:.03em;color:var(--ink-soft);margin:0 0 7px}
+.prep ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.5}
+.prep ul li{margin-bottom:5px}
+.prep p{margin:0;font-size:13.5px}
+
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 5px}
+.editnote{font-size:11.5px;color:var(--ink-faint);margin:0 0 14px}
+
+.report{max-width:860px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.rep-hero{padding:40px 46px 32px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff,#fbfbf9)}
+.rep-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint)}
+.rep-name{font-family:var(--display);font-weight:700;font-size:34px;letter-spacing:-.02em;margin:6px 0 2px;line-height:1.08}
+.rep-name .cn{font-family:var(--body);font-size:22px;color:var(--ink-soft);font-weight:500;margin-left:10px}
+.rep-meta{font-size:13.5px;color:var(--ink-soft)}
+.rep-lead{font-size:15px;line-height:1.6;margin:20px 0 0;max-width:62ch}
+.rep-stage{display:flex;margin:24px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.rep-stage .st{flex:1;text-align:center;padding:9px 6px;font-size:11.5px;font-weight:600;color:var(--ink-faint);background:#fff;border-right:1px solid var(--line);line-height:1.25}
+.rep-stage .st:last-child{border-right:0}
+.rep-stage .st.on{background:var(--accent);color:#fff}
+.rep-stage .st .n{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.06em;opacity:.55;margin-bottom:3px}
+.marker{font-family:var(--display);font-size:18px;font-weight:600;line-height:1.4;color:var(--ink);border-left:3px solid var(--accent);padding:1px 0 1px 16px;margin:0 0 16px}
+.ice-lead{background:#fff;border:1px solid #e6dcf2;border-radius:11px;padding:14px 16px;margin-bottom:16px}
+.ice-lead h4{font-family:var(--display);font-size:12px;color:var(--internal);margin:0 0 8px;letter-spacing:.02em}
+.ice-lead ul{margin:0;padding-left:18px;font-size:14px;line-height:1.55}
+.ice-lead ul li{margin-bottom:5px}
+.ice-lead .empty{list-style:none}
+.rep-section{padding:28px 46px;border-bottom:1px solid var(--line)}
+.rep-section:last-child{border-bottom:0}
+.rep-h{font-family:var(--display);font-weight:600;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 15px;display:flex;align-items:center;gap:10px}
+.rep-h::after{content:"";flex:1;height:1px;background:var(--line)}
+.rep-p{font-size:14px;line-height:1.65;margin:0 0 12px;white-space:pre-wrap}
+.rep-gap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:640px){.rep-gap{grid-template-columns:1fr}}
+.gapcard{border:1px solid var(--line);border-radius:11px;padding:15px 16px}
+.gapcard.aim{background:var(--accent-soft);border-color:#dcdaf7}
+.gapcard p{margin:0;font-size:13.5px;line-height:1.55}
+.delta{background:var(--gap-soft);border:1px solid #f0d9c2;border-radius:11px;padding:13px 16px}
+.delta .eyebrow{color:var(--gap)}.delta p{margin:0;font-size:13.5px;line-height:1.55}
+.list{margin:0;padding:0;list-style:none;counter-reset:n}
+.list li{display:flex;gap:13px;align-items:flex-start;margin-bottom:11px;font-size:14px;line-height:1.55}
+.list li::before{counter-increment:n;content:counter(n,decimal-leading-zero);font-family:var(--mono);font-weight:600;font-size:12px;color:var(--accent);padding-top:2px}
+.insights li::before{color:var(--internal)}
+.plat-mini{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(max-width:640px){.plat-mini{grid-template-columns:1fr}}
+.plat-mini .pm{border:1px solid var(--line);border-radius:10px;padding:11px 13px;display:flex;gap:10px;align-items:center}
+.plat-mini .badge{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:#fff;font-family:var(--display);font-weight:700;font-size:11px}
+.plat-mini .pn{font-weight:600;font-size:13px}.plat-mini .ps{font-size:12px;color:var(--ink-soft);font-family:var(--mono)}
+.sources{font-size:11.5px;color:var(--ink-faint);line-height:1.7;word-break:break-all}
+.sources a{color:var(--accent);text-decoration:none}
+.rep-foot{padding:18px 46px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.empty{color:var(--ink-faint);font-style:italic}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="mark">形象<b>·</b>情报</span><span class="tag">Founder IP Intelligence</span></div>
+  <div class="toolbar">
+    <button class="btn ghost" id="btnNew" onclick="if(window.resetAll)resetAll()">新建</button>
+    <button class="btn" id="btnPdf" onclick="if(window.downloadPDF)downloadPDF()" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+      下载 PDF
+    </button>
+  </div>
+</div>
+
+<div class="shell">
+
+  <!-- ============ 输入 ============ -->
+  <div id="inputView" class="view on">
+
+    <div id="jsWarn" style="background:#fbeaea;border:1px solid #e3b3b3;color:#9a2b2b;padding:11px 15px;border-radius:10px;margin-bottom:18px;font-size:13px;line-height:1.5">⚠️ 脚本尚未运行。如果这行字一直在,请<b>重新载入页面</b>(Ctrl/Cmd + Shift + R);若仍在,代表此环境挡住了脚本。</div>
+
+    <div class="block">
+      <div class="block-head"><span class="block-num">01</span><h2 class="block-title">要研究谁</h2></div>
+      <p class="block-sub">姓名、公司、链接。中文名很重要——本地媒体常用中文名报道。</p>
+      <div class="grid g3">
+        <div class="field"><label>英文名</label><input id="i_nameEn"></div>
+        <div class="field"><label>中文名</label><input id="i_nameCn"></div>
+        <div class="field"><label>公司</label><input id="i_company"></div>
+        <div class="field"><label>职位</label><input id="i_role"></div>
+        <div class="field"><label>行业</label><input id="i_industry"></div>
+        <div class="field"><label>阶段</label><input id="i_stage" placeholder="seed / Series A …"></div>
+        <div class="field"><label>地点</label><input id="i_location" placeholder="Kuala Lumpur, MY"></div>
+        <div class="field"><label>网站</label><input id="i_website"></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="block-num">02</span><h2 class="block-title">社交链接 & 私有数据</h2></div>
+      <p class="block-sub">贴上链接供自动调查。Follower / engagement 无法自动抓取——请登入后手动填(可选)。</p>
+      <div id="links">
+        <div class="linkrow">
+          <span class="pl"><span class="badge" style="background:#2D64BC">in</span>LinkedIn</span>
+          <input data-link="li" placeholder="https://…"><input data-foll="li" placeholder="—"><input data-eng="li" placeholder="—">
+        </div>
+        <div class="linkrow">
+          <span class="pl"><span class="badge" style="background:#17181B">X</span>X / Twitter</span>
+          <input data-link="x" placeholder="https://…"><input data-foll="x" placeholder="—"><input data-eng="x" placeholder="—">
+        </div>
+        <div class="linkrow">
+          <span class="pl"><span class="badge" style="background:#C8377B">IG</span>Instagram</span>
+          <input data-link="ig" placeholder="https://…"><input data-foll="ig" placeholder="—"><input data-eng="ig" placeholder="—">
+        </div>
+        <div class="linkrow">
+          <span class="pl"><span class="badge" style="background:#C8261C">YT</span>YouTube</span>
+          <input data-link="yt" placeholder="https://…"><input data-foll="yt" placeholder="—"><input data-eng="yt" placeholder="—">
+        </div>
+        <div class="linkrow">
+          <span class="pl"><span class="badge" style="background:#11A8A0">TT</span>TikTok</span>
+          <input data-link="tt" placeholder="https://…"><input data-foll="tt" placeholder="—"><input data-eng="tt" placeholder="—">
+        </div>
+        <div class="linkrow" style="margin-top:2px"><span class="pl"></span><span class="hint">链接</span><span class="hint">粉丝数</span><span class="hint">互动率</span></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="block-num">03</span><h2 class="block-title">报告语言 & 分析师补充</h2></div>
+      <div class="grid g2">
+        <div class="field"><label>报告语言</label>
+          <select id="i_outLang"><option value="zh">华文</option><option value="en">English</option><option value="both">双语（华文 + English）</option></select>
+        </div>
+        <div class="field"><label>你已经知道的(可选)</label><textarea id="i_seed" placeholder="任何你听说过的事——作为调查的背景。"></textarea></div>
+      </div>
+      <div class="runbar">
+        <button class="btn primary" id="btnRun" onclick="if(window.run)run()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          开始调查
+        </button>
+        <div class="status" id="status"></div>
+      </div>
+      <div class="warn"><b>务必核实。</b> AI 调查可能撞名、漏掉本地背景——华人名字和马来西亚资料尤其常见。把草稿当起点,见面前先核对修正。</div>
+    </div>
+  </div>
+
+  <!-- ============ 结果 ============ -->
+  <div id="resultView" class="view">
+
+    <div class="internal">
+      <span class="tagline"><span class="dot"></span>内部专用 · 不进下载档</span>
+      <p class="snapshot" id="r_snapshot"></p>
+      <p class="subline" id="r_perceptionLine"></p>
+      <div class="ice-lead"><h4>🧊 破冰话题（开场先看这个）</h4><ul id="r_ice"></ul></div>
+      <div class="prep-grid">
+        <div class="prep"><h4>该问的聪明问题</h4><ul id="r_q"></ul></div>
+        <div class="prep"><h4>小心处理</h4><ul id="r_sens"></ul></div>
+        <div class="prep"><h4>可能的共同点</h4><p id="r_mutual"></p></div>
+      </div>
+    </div>
+
+    <p class="eyebrow">客户报告 · 核对修改后再下载</p>
+    <p class="editnote">以下内容会印进 PDF。</p>
+    <div class="report" id="report"></div>
+  </div>
+
+</div>
+
+<script>
+/* 报告内的标签(随报告语言切换) */
+const RL={
+  zh:{tagline:'形象情报',secBg:'背景与轨迹',secDigital:'数字足迹',secPerc:'公众观感',secGap:'差距与机会',secInsight:'我们注意到',secOpp:'优先动作',secMedia:'媒体与人脉',secSources:'资料来源',percNow:'目前被看成',percAim:'其实可以拥有',deltaLabel:'差距——我们的范围',foll:'粉丝',eng:'互动',dateLoc:'zh-CN',secStage:'目前阶段',percMarker:'公众眼中的他',stages:['探索期','有产品·待规模化','已是行业 IP','跨界转型']},
+  en:{tagline:'IP Intelligence',secBg:'Background & trajectory',secDigital:'Digital footprint',secPerc:'Public perception',secGap:'Gap & opportunity',secInsight:'What we noticed',secOpp:'Priority moves',secMedia:'Media & associations',secSources:'Sources',percNow:'Perceived as today',percAim:'Could be known for',deltaLabel:'The gap — our scope',foll:'followers',eng:'eng',dateLoc:undefined,secStage:'Current stage',percMarker:'In the public’s eye',stages:['Exploring','Product · pre-scale','Industry IP','Pivoting']}
+};
+
+const PLATFORMS=[
+  {id:'li',name:'LinkedIn',color:'#2D64BC',abbr:'in'},
+  {id:'x',name:'X / Twitter',color:'#17181B',abbr:'X'},
+  {id:'ig',name:'Instagram',color:'#C8377B',abbr:'IG'},
+  {id:'yt',name:'YouTube',color:'#C8261C',abbr:'YT'},
+  {id:'tt',name:'TikTok',color:'#11A8A0',abbr:'TT'},
+];
+const $=s=>document.querySelector(s);
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const STATE={input:{},links:{},composed:null,research:null};
+
+/* ---------- Claude API ---------- */
+async function callClaude(prompt, useSearch){
+  const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt,useSearch})});
+  if(!res.ok){ let msg=res.status; try{const j=await res.json(); if(j&&j.error)msg=(typeof j.error==='string'?j.error:JSON.stringify(j.error));}catch(e){} throw new Error("api "+msg); }
+  const data=await res.json();
+  const texts=(data.content||[]).filter(b=>b.type==="text").map(b=>b.text||"").filter(s=>s.trim());
+  for(let k=texts.length-1;k>=0;k--){ if(texts[k].includes("{")) return texts[k]; }
+  return texts.join("\n");
+}
+function parseJSON(txt){
+  let s=(txt||'').replace(/```json/gi,'').replace(/```/g,'');
+  const start=s.indexOf('{');
+  if(start<0)throw new Error('no json in response');
+  s=s.slice(start);
+  const tryP=x=>{try{return JSON.parse(x);}catch(e){return undefined;}};
+  let r=tryP(s); if(r)return r;
+  r=tryP(s.replace(/,\s*([}\]])/g,'$1')); if(r)return r;
+  let stack=[],inStr=false,escd=false,endIdx=-1;
+  for(let k=0;k<s.length;k++){
+    const ch=s[k];
+    if(inStr){ if(escd)escd=false; else if(ch==='\\')escd=true; else if(ch==='"')inStr=false; continue; }
+    if(ch==='"'){inStr=true;continue;}
+    if(ch==='{'||ch==='[')stack.push(ch);
+    else if(ch==='}'||ch===']'){stack.pop(); if(stack.length===0&&endIdx<0)endIdx=k+1;}
+  }
+  if(endIdx>0){ const cut=tryP(s.slice(0,endIdx)); if(cut)return cut; }
+  let out=s;
+  if(inStr)out+='"';
+  out=out.replace(/,\s*$/,'').replace(/:\s*$/,':null');
+  for(let k=stack.length-1;k>=0;k--)out+=(stack[k]==='{'?'}':']');
+  out=out.replace(/,\s*([}\]])/g,'$1');
+  r=tryP(out); if(r)return r;
+  console.warn('Unparseable response:',txt);
+  throw new Error('parse failed');
+}
+
+function gather(){
+  const v=id=>$('#'+id).value.trim();
+  STATE.input={nameEn:v('i_nameEn'),nameCn:v('i_nameCn'),company:v('i_company'),role:v('i_role'),industry:v('i_industry'),stage:v('i_stage'),location:v('i_location'),website:v('i_website'),outLang:$('#i_outLang').value,seed:v('i_seed')};
+  STATE.links={};
+  PLATFORMS.forEach(p=>{
+    STATE.links[p.id]={url:document.querySelector(`[data-link="${p.id}"]`).value.trim(),foll:document.querySelector(`[data-foll="${p.id}"]`).value.trim(),eng:document.querySelector(`[data-eng="${p.id}"]`).value.trim()};
+  });
+}
+
+async function run(){
+  gather();
+  const i=STATE.input;
+  if(!(i.nameEn||i.nameCn)||!Object.values(STATE.links).some(l=>l.url)){
+    $('#status').innerHTML=`<span style="color:var(--gap)">至少填写姓名和一个链接。</span>`;return;
+  }
+  const btn=$('#btnRun');btn.disabled=true;
+  const setStatus=(t,sp)=>$('#status').innerHTML=(sp?'<span class="spinner"></span>':'')+esc(t);
+  try{
+    setStatus('正在搜索公开网络…',true);
+    const linkList=PLATFORMS.filter(p=>STATE.links[p.id].url).map(p=>`${p.name}: ${STATE.links[p.id].url}`).join('\n');
+    const rPrompt=`Research this founder using web search. Be factual; only report what you can find. If unsure, say so.
+Person: ${i.nameEn} ${i.nameCn?'(Chinese name: '+i.nameCn+')':''}
+Company: ${i.company}; Role: ${i.role}; Industry: ${i.industry}; Location: ${i.location}
+Links:\n${linkList}
+${i.seed?'Analyst note: '+i.seed:''}
+Return ONLY a JSON object, no prose, no markdown. Keep every field under 35 words. Max 3 sources.
+{"background":"","currentWork":"","perception":"","media":"","associations":"","recentActivity":"","languageUse":"which language(s) they post in and what audience that reaches","confidence":"high|medium|low note on data quality","sources":[{"title":"","url":""}]}`;
+    const research=parseJSON(await callClaude(rPrompt,true));
+    STATE.research=research;
+
+    const langs = i.outLang==='both' ? ['zh','en'] : [i.outLang];
+    STATE.composed={};
+    for(const L of langs){
+      setStatus(langs.length>1?('正在撰写报告… '+(L==='zh'?'华文':'English')):'正在撰写报告…',true);
+      const langName=L==='zh'?'Simplified Chinese':'English';
+      const cPrompt=`You write founder IP-assessment reports for a firm that helps founders build their public profile. Use ONLY these verified findings; do not invent facts.
+FINDINGS:${JSON.stringify(research)}
+SUBJECT: ${i.nameEn} ${i.nameCn} — ${i.role} at ${i.company}, ${i.industry}, ${i.location}.
+Write a sharp, specific, non-generic report. The "insights" must feel personally researched (reference a specific idea, pattern, or recent move).
+LANGUAGE RULES: write lead, background, digital, perceptionNow, perceptionMarker, perceptionAim, gapDelta, insights, opportunities, media in ${langName}. Always write snapshot, perceptionLine, and every meetingPrep field in Simplified Chinese (these are for our internal team). The "stage" value is a fixed key, not translated.
+Return ONLY a JSON object, no prose, no markdown. Each text field under 40 words:
+{"lead":"","stage":"pick ONE that fits best: explore (still finding direction) | product (has product, pre-scale) | authority (already an industry IP/known voice) | pivot (crossing into a new field)","background":"","digital":"online presence & content themes","perceptionMarker":"one vivid sentence capturing how the public sees them right now","perceptionNow":"","perceptionAim":"","gapDelta":"","insights":["","",""],"opportunities":["","",""],"media":"","snapshot":"one punchy line in Chinese","perceptionLine":"one line in Chinese: how public reads them","meetingPrep":{"icebreakers":["",""],"questions":["",""],"sensitive":[""],"mutual":""}}`;
+      STATE.composed[L]=parseJSON(await callClaude(cPrompt,false));
+    }
+
+    setStatus('完成——请在下方核对。',false);
+    $('#btnPdf').disabled=false;
+    renderInternal();renderReport();
+    showView('result');
+  }catch(e){
+    console.error(e);
+    setStatus('出错了,请检查网络后重试。',false);
+  }finally{btn.disabled=false;}
+}
+
+function primaryComposed(){ if(!STATE.composed)return null; return STATE.composed.zh||STATE.composed.en||Object.values(STATE.composed)[0]; }
+
+function renderInternal(){
+  const c=primaryComposed();if(!c)return;
+  $('#r_snapshot').textContent=c.snapshot||'';
+  $('#r_perceptionLine').textContent=c.perceptionLine||'';
+  const mp=c.meetingPrep||{};
+  const ul=arr=>(arr||[]).filter(Boolean).map(x=>`<li>${esc(x)}</li>`).join('')||`<li class="empty">—</li>`;
+  $('#r_ice').innerHTML=ul(mp.icebreakers);
+  $('#r_q').innerHTML=ul(mp.questions);
+  $('#r_sens').innerHTML=ul(mp.sensitive);
+  $('#r_mutual').textContent=mp.mutual||'—';
+}
+
+function renderReport(){
+  if(!STATE.composed)return;
+  const i=STATE.input;
+  const langs = i.outLang==='both' ? ['zh','en'] : [i.outLang];
+  const heroLang=langs[0], tH=RL[heroLang], cH=STATE.composed[heroLang];
+  const nameLine=`${esc(i.nameEn||i.nameCn)}${i.nameEn&&i.nameCn?`<span class="cn">${esc(i.nameCn)}</span>`:''}`;
+  const meta=[i.role,i.company,i.industry,i.location].filter(Boolean).join(' · ');
+  const stageKeys=['explore','product','authority','pivot'];
+  const curStage=stageKeys.indexOf((cH.stage||'').toLowerCase());
+  const stageTrack=`<div class="rep-stage">${tH.stages.map((s,n)=>`<div class="st ${n===curStage?'on':''}"><span class="n">0${n+1}</span>${esc(s)}</div>`).join('')}</div>`;
+  const srcs=(STATE.research?.sources||[]).filter(s=>s&&s.url).map(s=>`<a href="${esc(s.url)}" target="_blank">${esc(s.title||s.url)}</a>`).join(' · ');
+  const list=(arr,cls)=>`<ul class="list ${cls||''}">${(arr||[]).filter(Boolean).map(x=>`<li><span>${esc(x)}</span></li>`).join('')}</ul>`;
+  const platCardsFor=tt=>PLATFORMS.filter(p=>STATE.links[p.id].url||STATE.links[p.id].foll).map(p=>{
+    const d=STATE.links[p.id];
+    const stats=[d.foll&&`${esc(d.foll)} ${tt.foll}`,d.eng&&`${esc(d.eng)} ${tt.eng}`].filter(Boolean).join(' · ');
+    return `<div class="pm"><span class="badge" style="background:${p.color}">${p.abbr}</span><div><div class="pn">${p.name}</div><div class="ps">${stats||'—'}</div></div></div>`;
+  }).join('');
+  const group=L=>{
+    const tt=RL[L], c=STATE.composed[L];
+    const divider = langs.length>1?`<div class="rep-section" style="background:#faf9fc;padding-top:16px;padding-bottom:16px"><div class="rep-h" style="color:var(--accent)">${L==='zh'?'中文报告':'English report'}</div></div>`:'';
+    return divider+
+      `<div class="rep-section"><h3 class="rep-h">${tt.secBg}</h3><p class="rep-p">${esc(c.background)||'—'}</p></div>`+
+      `<div class="rep-section"><h3 class="rep-h">${tt.secDigital}</h3><p class="rep-p">${esc(c.digital)||'—'}</p><div class="plat-mini">${platCardsFor(tt)}</div></div>`+
+      `<div class="rep-section"><h3 class="rep-h">${tt.secPerc}</h3>${c.perceptionMarker?`<div class="eyebrow">${tt.percMarker}</div><p class="marker">“${esc(c.perceptionMarker)}”</p>`:''}<p class="rep-p">${esc(c.perceptionNow)||''}</p></div>`+
+      `<div class="rep-section"><h3 class="rep-h">${tt.secGap}</h3><div class="rep-gap"><div class="gapcard"><p class="eyebrow">${tt.percNow}</p><p>${esc(c.perceptionNow)||'—'}</p></div><div class="gapcard aim"><p class="eyebrow">${tt.percAim}</p><p>${esc(c.perceptionAim)||'—'}</p></div></div>${c.gapDelta?`<div class="delta"><p class="eyebrow">${tt.deltaLabel}</p><p>${esc(c.gapDelta)}</p></div>`:''}</div>`+
+      `<div class="rep-section"><h3 class="rep-h">${tt.secInsight}</h3>${list(c.insights,'insights')}</div>`+
+      `<div class="rep-section"><h3 class="rep-h">${tt.secOpp}</h3>${list(c.opportunities)}</div>`+
+      `<div class="rep-section"><h3 class="rep-h">${tt.secMedia}</h3><p class="rep-p">${esc(c.media)||'—'}</p></div>`;
+  };
+  $('#report').innerHTML=`
+    <div class="rep-hero">
+      <div class="rep-kicker">${tH.tagline} · ${new Date().toLocaleDateString(tH.dateLoc,{year:'numeric',month:'long',day:'numeric'})}</div>
+      <h1 class="rep-name">${nameLine}</h1>
+      <div class="rep-meta">${meta||'<span class=empty>—</span>'}</div>
+      <p class="rep-lead">${esc(cH.lead)||''}</p>
+      <div class="eyebrow" style="margin:22px 0 -16px">${tH.secStage}</div>
+      ${stageTrack}
+    </div>
+    ${langs.map(group).join('')}
+    ${srcs?`<div class="rep-section"><h3 class="rep-h">${tH.secSources}</h3><div class="sources">${srcs}</div></div>`:''}
+    <div class="rep-foot"><span>${tH.tagline}</span><span>${esc(i.company||'')}</span></div>`;
+}
+
+/* ---------- PDF 下载(按需载入 html2canvas + jsPDF) ---------- */
+function loadScript(src){
+  return new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src=src; s.onload=res; s.onerror=()=>rej(new Error('load fail'));
+    document.head.appendChild(s);
+    setTimeout(()=>rej(new Error('timeout')),9000);
+  });
+}
+async function ensurePdfLibs(){
+  if(window.html2canvas&&window.jspdf)return;
+  if(!window.html2canvas)await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+  if(!window.jspdf)await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+}
+async function downloadPDF(){
+  const btn=$('#btnPdf'); const old=btn.innerHTML;
+  btn.disabled=true; btn.textContent='生成中…';
+  try{
+    await ensurePdfLibs();
+    if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+    const el=$('#report');
+    const canvas=await html2canvas(el,{scale:2,backgroundColor:'#ffffff',useCORS:true,windowWidth:el.scrollWidth});
+    const img=canvas.toDataURL('image/jpeg',0.95);
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF('p','mm','a4');
+    const pw=pdf.internal.pageSize.getWidth(), ph=pdf.internal.pageSize.getHeight();
+    const imgW=pw, imgH=canvas.height*imgW/canvas.width;
+    let heightLeft=imgH, pos=0;
+    pdf.addImage(img,'JPEG',0,pos,imgW,imgH); heightLeft-=ph;
+    while(heightLeft>0){ pos-=ph; pdf.addPage(); pdf.addImage(img,'JPEG',0,pos,imgW,imgH); heightLeft-=ph; }
+    const nm=(STATE.input.nameEn||STATE.input.nameCn||'founder').replace(/[^\w\u4e00-\u9fa5-]+/g,'_');
+    pdf.save(`${nm}_IP_report.pdf`);
+  }catch(e){
+    console.error('PDF failed, falling back to print',e);
+    const w=window.open('','_blank');
+    if(w){
+      const css=document.querySelector('style').innerHTML;
+      w.document.write('<html><head><meta charset="utf-8"><title>report</title><style>'+css+'body{background:#fff;padding:20px}</style></head><body>'+$('#report').outerHTML+'</body></html>');
+      w.document.close(); setTimeout(()=>w.print(),500);
+    } else alert('无法生成 PDF——请用浏览器的列印功能(Ctrl/Cmd+P)存成 PDF。');
+  }finally{ btn.innerHTML=old; btn.disabled=false; }
+}
+
+function showView(v){
+  $('#inputView').classList.toggle('on',v==='input');
+  $('#resultView').classList.toggle('on',v==='result');
+  window.scrollTo(0,0);
+}
+function resetAll(){
+  document.querySelectorAll('input,textarea').forEach(el=>el.value='');
+  $('#i_outLang').value='zh';STATE.composed=null;STATE.research=null;$('#btnPdf').disabled=true;$('#status').innerHTML='';showView('input');
+}
+// 双重保险:事件监听 + 全域函数(供 inline onclick 后备)
+try{ $('#btnRun').addEventListener('click',run); }catch(e){}
+try{ $('#btnPdf').addEventListener('click',downloadPDF); }catch(e){}
+try{ $('#btnNew').addEventListener('click',resetAll); }catch(e){}
+window.run=run; window.downloadPDF=downloadPDF; window.resetAll=resetAll;
+var _jw=document.getElementById('jsWarn'); if(_jw)_jw.style.display='none';
