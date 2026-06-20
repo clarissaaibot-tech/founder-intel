@@ -318,17 +318,44 @@ async function callClaude(prompt, useSearch){
   return texts.join("\n");
 }
 function parseJSON(txt){
-  let s=(txt||'').replace(/```json/gi,'').replace(/```/g,'');
+  const original=txt||'';
+  let s=original.replace(/```json/gi,'').replace(/```/g,'');
   const start=s.indexOf('{');
   if(start<0){
-    const preview=(txt||'').slice(0,400);
+    const preview=original.slice(0,500);
     console.error('No JSON in response. Claude returned:\n', txt);
-    throw new Error('Claude 没有回 JSON。它回的内容(前 400 字):\n\n'+preview);
+    throw new Error('Claude 没有回 JSON。它回的内容(前 500 字):\n\n'+preview);
   }
   s=s.slice(start);
   const tryP=x=>{try{return JSON.parse(x);}catch(e){return undefined;}};
+  // strategy 1: direct
   let r=tryP(s); if(r)return r;
-  r=tryP(s.replace(/,\s*([}\]])/g,'$1')); if(r)return r;
+  // strategy 2: trailing comma cleanup + dangling colon before close
+  let s2=s.replace(/,\s*([}\]])/g,'$1').replace(/:\s*([,}\]])/g,':null$1');
+  r=tryP(s2); if(r)return r;
+  // strategy 3: control chars in strings (literal newlines/tabs) → escape them
+  const escapeControlChars=str=>{
+    let out='',inStr=false,escd=false;
+    for(let k=0;k<str.length;k++){
+      const ch=str[k];
+      if(inStr){
+        if(escd){out+=ch;escd=false;continue;}
+        if(ch==='\\'){out+=ch;escd=true;continue;}
+        if(ch==='"'){out+=ch;inStr=false;continue;}
+        if(ch==='\n'){out+='\\n';continue;}
+        if(ch==='\r'){out+='\\r';continue;}
+        if(ch==='\t'){out+='\\t';continue;}
+        out+=ch;
+      }else{
+        if(ch==='"')inStr=true;
+        out+=ch;
+      }
+    }
+    return out;
+  };
+  r=tryP(escapeControlChars(s)); if(r)return r;
+  r=tryP(escapeControlChars(s).replace(/,\s*([}\]])/g,'$1')); if(r)return r;
+  // strategy 4: find the longest balanced object from the start
   let stack=[],inStr=false,escd=false,endIdx=-1;
   for(let k=0;k<s.length;k++){
     const ch=s[k];
@@ -337,15 +364,23 @@ function parseJSON(txt){
     if(ch==='{'||ch==='[')stack.push(ch);
     else if(ch==='}'||ch===']'){stack.pop(); if(stack.length===0&&endIdx<0)endIdx=k+1;}
   }
-  if(endIdx>0){ const cut=tryP(s.slice(0,endIdx)); if(cut)return cut; }
+  if(endIdx>0){
+    const cut=s.slice(0,endIdx);
+    let r2=tryP(cut); if(r2)return r2;
+    r2=tryP(escapeControlChars(cut)); if(r2)return r2;
+  }
+  // strategy 5: rebuild closing brackets + escape controls
   let out=s;
   if(inStr)out+='"';
   out=out.replace(/,\s*$/,'').replace(/:\s*$/,':null');
   for(let k=stack.length-1;k>=0;k--)out+=(stack[k]==='{'?'}':']');
   out=out.replace(/,\s*([}\]])/g,'$1');
   r=tryP(out); if(r)return r;
-  console.warn('Unparseable response:',txt);
-  throw new Error('parse failed');
+  r=tryP(escapeControlChars(out)); if(r)return r;
+  // total failure — surface what we got, so analyst can paste to dev
+  console.warn('Unparseable response. Full text:\n',original);
+  const preview=original.slice(0,800);
+  throw new Error('JSON 解析失败。Claude 回的内容前 800 字(请截图给开发者):\n\n'+preview);
 }
 
 function gather(){
@@ -378,9 +413,10 @@ ${linkList}
 ${i.seed?'Analyst note: '+i.seed:''}
 
 CRITICAL OUTPUT RULES — read carefully:
-- Your ENTIRE response must be a single JSON object. Nothing else. No prose before or after.
+- Your ENTIRE response must be a single valid JSON object. Nothing else. No prose before or after.
 - Do NOT explain, apologize, or comment. Do NOT say "I cannot" — instead return the JSON with empty strings and mark confidence="low".
 - If you find nothing on this person, STILL return the JSON skeleton with empty values and confidence="low" with an explanation in that field. Do not refuse.
+- JSON STRING SAFETY: inside any string value, never include raw newlines or tab characters; never include unescaped double-quotes. If you want to quote someone, use single quotes 'like this'. Keep every string on a single line.
 - This is internal research about a public-facing founder for a meeting prep; their links are provided by them.
 
 For each field, give concrete specifics (years, names of companies/schools, project names, turning-point events) — not generic descriptions.
@@ -413,8 +449,9 @@ JSON shape (max 5 sources, fields trimmed):
       const cPrompt=`You write founder IP-assessment reports for SMTB Media — a firm that helps founders "become the person people remember". Use ONLY the verified findings provided; do not invent facts. Where research is thin, say so briefly rather than padding.
 
 CRITICAL OUTPUT RULES:
-- Your ENTIRE response must be a single JSON object. Nothing else. No prose before or after.
+- Your ENTIRE response must be a single valid JSON object. Nothing else. No prose before or after.
 - Do NOT explain, apologize, or refuse. If findings are thin, return the JSON with brief honest content (e.g. "research limited" notes) — never refuse.
+- JSON STRING SAFETY: inside any string value, never include raw newlines or tab characters; never include unescaped double-quotes. If you want to quote someone, use single quotes 'like this'. Keep every string on a single line.
 
 FINDINGS: ${JSON.stringify(research)}
 SUBJECT: ${i.nameEn} ${i.nameCn} — ${i.role} at ${i.company}, ${i.industry}, ${i.location}.
