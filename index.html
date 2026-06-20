@@ -40,11 +40,11 @@ body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:
 button{font-family:inherit;cursor:pointer}input,textarea,select{font-family:inherit}
 
 /* ---------- topbar ---------- */
-.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 28px;background:var(--night);color:#fff;border-bottom:1px solid var(--night)}
-.brand{display:flex;align-items:center;gap:16px;min-width:0}
-.logo-img{display:block;height:38px;width:auto;flex:0 0 auto}
-.rep-hero .logo-img{height:72px;margin-bottom:8px}
-.rep-foot .logo-img{height:32px;opacity:.95}
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;background:var(--night);color:#fff;border-bottom:1px solid var(--night)}
+.brand{display:flex;align-items:center;gap:18px;min-width:0}
+.logo-img{display:block;height:56px;width:auto;flex:0 0 auto}
+.rep-hero .logo-img{height:96px;margin-bottom:10px}
+.rep-foot .logo-img{height:44px;opacity:.95}
 .brand .tag{font-family:var(--body);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);white-space:nowrap;padding-left:14px;border-left:1px solid rgba(255,255,255,.18);margin-left:2px}
 .toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .btn{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:7px;padding:8px 14px;font-size:12.5px;font-weight:500;letter-spacing:.02em;display:inline-flex;align-items:center;gap:7px}
@@ -320,7 +320,11 @@ async function callClaude(prompt, useSearch){
 function parseJSON(txt){
   let s=(txt||'').replace(/```json/gi,'').replace(/```/g,'');
   const start=s.indexOf('{');
-  if(start<0)throw new Error('no json in response');
+  if(start<0){
+    const preview=(txt||'').slice(0,400);
+    console.error('No JSON in response. Claude returned:\n', txt);
+    throw new Error('Claude 没有回 JSON。它回的内容(前 400 字):\n\n'+preview);
+  }
   s=s.slice(start);
   const tryP=x=>{try{return JSON.parse(x);}catch(e){return undefined;}};
   let r=tryP(s); if(r)return r;
@@ -365,7 +369,7 @@ async function run(){
     // ===== RESEARCH: deeper, structured =====
     setStatus('正在深入调查公开网络…',true);
     const linkList=PLATFORMS.filter(p=>STATE.links[p.id].url).map(p=>p.name+': '+STATE.links[p.id].url).join('\n');
-    const rPrompt=`Investigate this founder deeply using web search. The goal is to understand their PAST so the meeting team grasps who they are in 2 minutes. Be specific and factual; if unsure, say so. Don't pad.
+    const rPrompt=`Investigate this founder using web search. The goal is to understand their PAST so the meeting team grasps who they are in 2 minutes. Be specific and factual; if unsure, mark in confidence. Don't pad.
 
 Person: ${i.nameEn} ${i.nameCn?'(Chinese name: '+i.nameCn+')':''}
 Company: ${i.company}; Role: ${i.role}; Industry: ${i.industry}; Location: ${i.location}
@@ -373,22 +377,28 @@ Links:
 ${linkList}
 ${i.seed?'Analyst note: '+i.seed:''}
 
-Dig hard on PAST. For each field below, give concrete specifics (years, names of companies/schools, project names, turning-point events) — not generic descriptions.
+CRITICAL OUTPUT RULES — read carefully:
+- Your ENTIRE response must be a single JSON object. Nothing else. No prose before or after.
+- Do NOT explain, apologize, or comment. Do NOT say "I cannot" — instead return the JSON with empty strings and mark confidence="low".
+- If you find nothing on this person, STILL return the JSON skeleton with empty values and confidence="low" with an explanation in that field. Do not refuse.
+- This is internal research about a public-facing founder for a meeting prep; their links are provided by them.
 
-Return ONLY a JSON object, no prose, no markdown. Max 5 sources.
+For each field, give concrete specifics (years, names of companies/schools, project names, turning-point events) — not generic descriptions.
+
+JSON shape (max 5 sources, fields trimmed):
 {
   "origin": "where they're from, schooling, first job — concrete, with names/years if found",
-  "trajectory": "career path step by step: each role, why they moved, what they built. Be a paragraph, not a list.",
-  "definingMoments": ["specific event/decision that shaped them","another","another"],
-  "assets": "what they've built that's still useful today: notable projects, IP, networks, expertise — be specific",
-  "anglesToDig": ["a non-obvious thread worth pulling on","another"],
+  "trajectory": "career path as a paragraph: each role, why they moved, what they built",
+  "definingMoments": ["specific event/decision","another","another"],
+  "assets": "what they've built that's still useful today: notable projects, IP, networks, expertise",
+  "anglesToDig": ["non-obvious thread worth pulling","another"],
   "currentWork": "what they're focused on right now",
   "perception": "how the public reads them today",
   "media": "press, podcasts, speaking, notable appearances — name them",
   "associations": "notable people connected to them",
   "recentActivity": "what they've posted/said/done in last 3 months",
   "languageUse": "which language(s) they post in and what audience that reaches",
-  "confidence": "high|medium|low — note on data quality and any uncertainties (e.g. name collisions)",
+  "confidence": "high|medium|low — note on data quality and any uncertainties (e.g. name collisions, sparse local data)",
   "sources": [{"title":"","url":""}]
 }`;
     const research=parseJSON(await callClaude(rPrompt,true));
@@ -401,6 +411,10 @@ Return ONLY a JSON object, no prose, no markdown. Max 5 sources.
       setStatus(langs.length>1?('正在撰写报告… '+(L==='zh'?'华文':'English')):'正在撰写报告…',true);
       const langName=L==='zh'?'Simplified Chinese':'English';
       const cPrompt=`You write founder IP-assessment reports for SMTB Media — a firm that helps founders "become the person people remember". Use ONLY the verified findings provided; do not invent facts. Where research is thin, say so briefly rather than padding.
+
+CRITICAL OUTPUT RULES:
+- Your ENTIRE response must be a single JSON object. Nothing else. No prose before or after.
+- Do NOT explain, apologize, or refuse. If findings are thin, return the JSON with brief honest content (e.g. "research limited" notes) — never refuse.
 
 FINDINGS: ${JSON.stringify(research)}
 SUBJECT: ${i.nameEn} ${i.nameCn} — ${i.role} at ${i.company}, ${i.industry}, ${i.location}.
@@ -419,7 +433,7 @@ Categories:
 
 LANGUAGE RULES: write lead, background fields, digital, perceptionMarker, perceptionNow, perceptionAim, gapDelta, insights, media, and all ipIdeas (title + why) in ${langName}. Always write snapshot, perceptionLine, and all meetingPrep fields in Simplified Chinese (internal team).
 
-Return ONLY a JSON object, no prose, no markdown. Keep each text field tight.
+Return ONLY a JSON object. Keep each text field tight.
 {
   "lead": "2-sentence opening: who this person is + the headline read on him",
   "background": {
@@ -462,7 +476,8 @@ Return ONLY a JSON object, no prose, no markdown. Keep each text field tight.
     showView('result');
   }catch(e){
     console.error(e);
-    setStatus('出错了:'+(e.message||e),false);
+    const msg=(e.message||String(e));
+    $('#status').innerHTML='<div style="color:#a63b08;white-space:pre-wrap;font-size:12.5px;line-height:1.5;max-width:680px"><b>出错了:</b>\n'+esc(msg)+'</div>';
   }finally{btn.disabled=false;}
 }
 
