@@ -413,7 +413,8 @@ ${linkList}
 ${i.seed?'Analyst note: '+i.seed:''}
 
 CRITICAL OUTPUT RULES — read carefully:
-- Your ENTIRE response must be a single valid JSON object. Nothing else. No prose before or after.
+- Your ENTIRE response must be a single valid JSON object — RAW JSON only.
+- Do NOT wrap in markdown code blocks. Do NOT write \`\`\`json or \`\`\`. Just the bare { ... } object.
 - Do NOT explain, apologize, or comment. Do NOT say "I cannot" — instead return the JSON with empty strings and mark confidence="low".
 - If you find nothing on this person, STILL return the JSON skeleton with empty values and confidence="low" with an explanation in that field. Do not refuse.
 - JSON STRING SAFETY: inside any string value, never include raw newlines or tab characters; never include unescaped double-quotes. If you want to quote someone, use single quotes 'like this'. Keep every string on a single line.
@@ -440,72 +441,35 @@ JSON shape (max 5 sources, fields trimmed):
     const research=parseJSON(await callClaude(rPrompt,true));
     STATE.research=research;
 
-    // ===== COMPOSE: language-specific report =====
+    // ===== COMPOSE: language-specific report (parallel for bilingual) =====
     const langs = i.outLang==='both' ? ['zh','en'] : [i.outLang];
-    STATE.composed={};
-    for(const L of langs){
-      setStatus(langs.length>1?('正在撰写报告… '+(L==='zh'?'华文':'English')):'正在撰写报告…',true);
+    setStatus(langs.length>1?'正在并行撰写双语报告…':'正在撰写报告…',true);
+    const buildCPrompt=(L)=>{
       const langName=L==='zh'?'Simplified Chinese':'English';
-      const cPrompt=`You write founder IP-assessment reports for SMTB Media — a firm that helps founders "become the person people remember". Use ONLY the verified findings provided; do not invent facts. Where research is thin, say so briefly rather than padding.
+      return `You write founder IP-assessment reports for SMTB Media — a firm that helps founders "become the person people remember". Use ONLY the verified findings provided; do not invent facts.
 
 CRITICAL OUTPUT RULES:
-- Your ENTIRE response must be a single valid JSON object. Nothing else. No prose before or after.
-- Do NOT explain, apologize, or refuse. If findings are thin, return the JSON with brief honest content (e.g. "research limited" notes) — never refuse.
-- JSON STRING SAFETY: inside any string value, never include raw newlines or tab characters; never include unescaped double-quotes. If you want to quote someone, use single quotes 'like this'. Keep every string on a single line.
+- Your ENTIRE response must be a single valid JSON object — RAW JSON only.
+- Do NOT wrap in markdown code blocks. Do NOT write \`\`\`json or \`\`\`. Just the bare { ... } object.
+- Do NOT explain, apologize, or refuse. If findings are thin, return JSON with brief honest content (e.g. "research limited") — never refuse.
+- JSON STRING SAFETY: never put raw newlines, tabs, or unescaped double-quotes inside string values. To quote someone, use single quotes 'like this'. Keep each string on a single line.
+- Keep each text field UNDER 50 words. Be tight, specific, non-generic.
 
 FINDINGS: ${JSON.stringify(research)}
 SUBJECT: ${i.nameEn} ${i.nameCn} — ${i.role} at ${i.company}, ${i.industry}, ${i.location}.
 
-This report has two jobs: (1) let our team understand his PAST in 2 minutes, (2) make him feel genuinely researched. Be sharp, specific, non-generic. The "insights" must reference concrete details from the findings.
+The report has two jobs: (1) let our team understand his PAST in 2 minutes, (2) make him feel genuinely researched. The "insights" must reference concrete details from findings.
 
-For "ipIdeas": produce content directions SHAPED FROM HIS PAST — not generic founder advice. 6 categories; aim for 3–5 ideas per category. Each idea = a clickable title + one-sentence "why this fits him" tying back to a specific fact from findings.
+For "ipIdeas": content directions SHAPED FROM HIS PAST — not generic advice. Exactly 3 ideas per category. Each idea = clickable title + one-sentence "why this fits him" citing a specific finding fact.
 
-Categories:
-- story (stories from his own life)
-- opinion (takes he holds but hasn't articulated)
-- howto (things he can teach)
-- convo (people to interview / industry conversations)
-- contra (his underrated/misread side)
-- topical (industry moments he can speak to)
+LANGUAGE: write lead, background fields, digital, perceptionMarker, perceptionNow, perceptionAim, gapDelta, insights, media, and all ipIdeas in ${langName}. Always write snapshot, perceptionLine, and meetingPrep fields in Simplified Chinese.
 
-LANGUAGE RULES: write lead, background fields, digital, perceptionMarker, perceptionNow, perceptionAim, gapDelta, insights, media, and all ipIdeas (title + why) in ${langName}. Always write snapshot, perceptionLine, and all meetingPrep fields in Simplified Chinese (internal team).
-
-Return ONLY a JSON object. Keep each text field tight.
-{
-  "lead": "2-sentence opening: who this person is + the headline read on him",
-  "background": {
-    "origin": "his starting point, told vividly",
-    "trajectory": "his career path as a story, not a CV",
-    "moments": ["defining moment 1","2","3"],
-    "assets": "what he carries with him today — networks, IP, expertise",
-    "angles": ["non-obvious thread 1","2"]
-  },
-  "digital": "his online presence & content patterns",
-  "perceptionMarker": "one vivid sentence: how the public sees him right now",
-  "perceptionNow": "expanded — what people associate with him",
-  "perceptionAim": "the ownable position he could credibly claim",
-  "gapDelta": "what's missing between today and that position — our scope",
-  "insights": ["personal observation 1 tied to a finding","2","3"],
-  "ipIdeas": {
-    "story":   [{"title":"","why":""}],
-    "opinion": [{"title":"","why":""}],
-    "howto":   [{"title":"","why":""}],
-    "convo":   [{"title":"","why":""}],
-    "contra":  [{"title":"","why":""}],
-    "topical": [{"title":"","why":""}]
-  },
-  "media": "his media footprint and notable associations",
-  "snapshot": "one Chinese line: who he is",
-  "perceptionLine": "one Chinese line: how public reads him",
-  "meetingPrep": {
-    "icebreakers": ["specific opener referencing his actual work","another"],
-    "questions":   ["smart Q tied to his trajectory","another"],
-    "sensitive":   ["something to handle carefully"],
-    "mutual":      "possible common ground"
-  }
-}`;
-      STATE.composed[L]=parseJSON(await callClaude(cPrompt,false));
-    }
+Return JSON (each field tight, max 3 items in every array):
+{"lead":"","background":{"origin":"","trajectory":"","moments":["","",""],"assets":"","angles":["",""]},"digital":"","perceptionMarker":"","perceptionNow":"","perceptionAim":"","gapDelta":"","insights":["","",""],"ipIdeas":{"story":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"opinion":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"howto":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"convo":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"contra":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"topical":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}]},"media":"","snapshot":"","perceptionLine":"","meetingPrep":{"icebreakers":["",""],"questions":["",""],"sensitive":[""],"mutual":""}}`;
+    };
+    const results=await Promise.all(langs.map(L=>callClaude(buildCPrompt(L),false).then(parseJSON)));
+    STATE.composed={};
+    langs.forEach((L,idx)=>{STATE.composed[L]=results[idx];});
 
     setStatus('完成——请在下方核对。',false);
     $('#btnPdf').disabled=false;
