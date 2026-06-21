@@ -576,21 +576,20 @@ async function downloadPDF(){
       '<!doctype html><html lang="zh"><head><meta charset="utf-8"><title>SMTB_'+nm+'_report</title>'+
       '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">'+
       '<style>'+css+
-      // A4 with consistent page margins on EVERY page. Declare each side explicitly — browsers vary in support for the shorthand.
-      '@page{size:A4}'+
-      '@page{margin-top:18mm;margin-right:16mm;margin-bottom:18mm;margin-left:16mm}'+
+      // Hybrid pagination: top/bottom @page margins give every page breathing room (browser repeats them per page). L/R is 0 so dark banners can bleed to paper edges. The @page margin area is painted by the html background (cream), so it visually merges with content.
+      '@page{size:A4;margin-top:18mm !important;margin-bottom:18mm !important;margin-left:0 !important;margin-right:0 !important}'+
       'html{background:#F8F6F2 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
-      'body{margin:0;padding:0;background:#F8F6F2 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
-      '.report{max-width:none !important;margin:0 !important;border:0 !important;border-radius:0 !important;background:transparent !important}'+
+      'body{margin:0 !important;padding:0 !important;background:#F8F6F2 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+      '.report{max-width:none !important;margin:0 !important;border:0 !important;border-radius:0 !important;background:transparent !important;padding:0 16mm !important}'+
 
-      // Sections — page handles L/R margin; section only owns vertical rhythm
+      // Sections: vertical rhythm only — L/R handled by report wrapper
       '.rep-section{padding:24px 0 !important;border-top:1px solid var(--line-soft) !important;background:transparent !important}'+
       '.rep-section:first-of-type{border-top:0 !important;padding-top:0 !important}'+
 
-      // Hero banner: dark band that bleeds to paper edges. Negative margins on top/L/R reach the page edge.
-      '.rep-hero-banner{padding:16px 16mm !important;margin:-18mm -16mm 0 -16mm !important;background:var(--night) !important;border-bottom:3px solid var(--gold) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+      // Dark banners: escape the L/R wrapper padding via negative margin
+      '.rep-hero-banner{padding:22px 16mm !important;margin:0 -16mm !important;background:var(--night) !important;border-bottom:3px solid var(--gold) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
       '.rep-hero{padding:24px 0 24px 0 !important;background:transparent !important}'+
-      '.lang-divider{padding:10px 16mm !important;margin:0 -16mm !important;background:var(--night) !important;border-top:1px solid var(--gold) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+      '.lang-divider{padding:12px 16mm !important;margin:0 -16mm !important;background:var(--night) !important;border-top:1px solid var(--gold) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
 
       // KEEP-TOGETHER — only fine-grained items.
       '.bg-card,.ip-idea,.bullets li,.list li,.gapcard,.delta,.marker,.plat-mini .pm{break-inside:avoid !important;page-break-inside:avoid !important}'+
@@ -602,8 +601,9 @@ async function downloadPDF(){
       '.ip-cat{break-inside:auto !important;page-break-inside:auto !important}'+
       '.rep-lead{break-inside:avoid !important;page-break-inside:avoid !important}'+
 
-      // Finale page — full-bleed navy; extends into @page margins so it reaches paper edge
-      '.last-page-finale{break-before:page;page-break-before:always;background:#030E22 !important;color:#fff;padding:80px 16mm !important;margin:-18mm -16mm -18mm -16mm !important;min-height:calc(100vh + 36mm);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left;border-top:3px solid #FEB736;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+      // Finale page — its OWN @page rule with 0 margin so navy bleeds to all four edges
+      '@page finale{size:A4;margin:0}'+
+      '.last-page-finale{page:finale;break-before:page;page-break-before:always;background:#030E22 !important;color:#fff;padding:80px 16mm !important;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left;border-top:3px solid #FEB736;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
       '.last-page-finale .finale-slogan{font-family:Cormorant Garamond,Noto Serif SC,serif;font-style:italic;font-size:34px;line-height:1.35;color:#fff;margin:0 0 40px;max-width:22ch}'+
       '.last-page-finale .finale-logo{height:72px;width:auto;display:block}'+
 
