@@ -116,6 +116,10 @@ button{font-family:inherit;cursor:pointer}input,textarea,select{font-family:inhe
 .rep-h{font-family:var(--body);font-weight:700;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 24px;display:flex;align-items:center;gap:14px}
 .rep-h::before{content:"";width:24px;height:1px;background:var(--gold)}
 .rep-p{font-size:14.5px;line-height:1.75;margin:0 0 14px;color:var(--ink);white-space:pre-wrap}
+.bullets{list-style:none;margin:0;padding:0}
+.bullets li{position:relative;padding-left:22px;margin-bottom:10px;font-size:14.5px;line-height:1.7;color:var(--ink)}
+.bullets li::before{content:"";position:absolute;left:0;top:12px;width:12px;height:1px;background:var(--gold)}
+.bullets li:last-child{margin-bottom:0}
 
 /* Background — minimal labeled paragraphs */
 .bg-grid{display:flex;flex-direction:column;gap:24px}
@@ -411,8 +415,44 @@ LANGUAGE — STRICT:
 - Write snapshot, perceptionLine, and ALL meetingPrep fields in Simplified Chinese (internal team only).
 - If ${langName} is English: do NOT include any Chinese characters in the public-facing fields above.
 
+FORMAT — STRICT:
+- Fields marked as ARRAY must be arrays of short bullet points (2–4 items, each one sentence, max 20 words). Never write paragraphs in array fields.
+- Fields marked as STRING are single short sentences/phrases (perceptionMarker, lead, snapshot, perceptionLine).
+
 Return JSON:
-{"lead":"","background":{"origin":"","trajectory":"","moments":["","",""],"assets":"","angles":["",""]},"digital":"","perceptionMarker":"","perceptionNow":"","perceptionAim":"","gapDelta":"","insights":["","",""],"ipIdeas":{"story":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"opinion":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"howto":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"convo":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"contra":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"topical":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}]},"media":"","snapshot":"","perceptionLine":"","meetingPrep":{"icebreakers":["",""],"questions":["",""],"sensitive":[""],"mutual":""}}`;
+{
+  "lead": "STRING — 1 vivid sentence",
+  "background": {
+    "origin": ["ARRAY of 2-3 bullets about background, schooling, family"],
+    "trajectory": ["ARRAY of 3-5 bullets about career path"],
+    "moments": ["ARRAY of 3 defining moments"],
+    "assets": ["ARRAY of 3-5 bullets about what they have built"],
+    "angles": ["ARRAY of 2 non-obvious threads"]
+  },
+  "digital": ["ARRAY of 2-4 bullets about their online presence patterns"],
+  "perceptionMarker": "STRING — one vivid pull-quote sentence",
+  "perceptionNow": ["ARRAY of 2-4 bullets about how people read them now"],
+  "perceptionAim": ["ARRAY of 2-3 bullets about the position they could own"],
+  "gapDelta": ["ARRAY of 2-4 bullets — what is missing, our scope of work"],
+  "insights": ["ARRAY of 3 insights tied to specific findings"],
+  "ipIdeas": {
+    "story":   [{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],
+    "opinion": [{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],
+    "howto":   [{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],
+    "convo":   [{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],
+    "contra":  [{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],
+    "topical": [{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}]
+  },
+  "media": ["ARRAY of 2-4 bullets about media footprint and associations"],
+  "snapshot": "STRING — one Chinese line: who he is",
+  "perceptionLine": "STRING — one Chinese line: how public reads him",
+  "meetingPrep": {
+    "icebreakers": ["",""],
+    "questions":   ["",""],
+    "sensitive":   [""],
+    "mutual":      "STRING"
+  }
+}`;
     };
     const results=await Promise.all(langs.map(L=>callClaude(buildCPrompt(L),false).then(parseJSON)));
     STATE.composed={};
@@ -451,19 +491,30 @@ function renderReport(){
   const meta=[i.role,i.company,i.industry,i.location].filter(Boolean).join(' · ');
   const srcs=(STATE.research && STATE.research.sources||[]).filter(s=>s&&s.url).map(s=>'<a href="'+esc(s.url)+'" target="_blank">'+esc(s.title||s.url)+'</a>').join('  ·  ');
   const list=arr=>'<ul class="list">'+(arr||[]).filter(Boolean).map(x=>'<li><span>'+esc(x)+'</span></li>').join('')+'</ul>';
-  const platCardsFor=tt=>PLATFORMS.filter(p=>STATE.links[p.id].url||STATE.links[p.id].foll).map(p=>{
+  // Renders either a string (as <p>) or an array (as bullet list). Strips empties; returns dash if both empty.
+  const renderField=(val,kind)=>{
+    if(Array.isArray(val)){
+      const items=val.filter(x=>x&&String(x).trim());
+      if(!items.length)return '<p class="rep-p empty">—</p>';
+      return '<ul class="bullets">'+items.map(x=>'<li>'+esc(String(x))+'</li>').join('')+'</ul>';
+    }
+    const s=(val==null?'':String(val)).trim();
+    if(!s)return '<p class="rep-p empty">—</p>';
+    return '<p class="rep-p">'+esc(s)+'</p>';
+  };
+  const platCardsFor=tt=>PLATFORMS.filter(p=>STATE.links[p.id].foll||STATE.links[p.id].eng).map(p=>{
     const d=STATE.links[p.id];
     const stats=[d.foll&&(esc(d.foll)+' '+tt.foll),d.eng&&(esc(d.eng)+' '+tt.eng)].filter(Boolean).join(' · ');
-    return '<div class="pm"><span class="badge" style="background:'+p.color+'">'+p.abbr+'</span><div><div class="pn">'+p.name+'</div><div class="ps">'+(stats||'—')+'</div></div></div>';
+    return '<div class="pm"><span class="badge" style="background:'+p.color+'">'+p.abbr+'</span><div><div class="pn">'+p.name+'</div><div class="ps">'+stats+'</div></div></div>';
   }).join('');
 
   const bgBlock=(tt,b)=>{
     if(!b)return '';
     const items=[];
-    if(b.origin)     items.push('<div class="bg-card"><h5>'+tt.secOrigin+'</h5><p>'+esc(b.origin)+'</p></div>');
-    if(b.trajectory) items.push('<div class="bg-card"><h5>'+tt.secTrajectory+'</h5><p>'+esc(b.trajectory)+'</p></div>');
+    if(b.origin)     items.push('<div class="bg-card"><h5>'+tt.secOrigin+'</h5>'+renderField(b.origin,'p')+'</div>');
+    if(b.trajectory) items.push('<div class="bg-card"><h5>'+tt.secTrajectory+'</h5>'+renderField(b.trajectory,'p')+'</div>');
     if(b.moments&&b.moments.length) items.push('<div class="bg-card"><h5>'+tt.secMoments+'</h5><ul>'+b.moments.filter(Boolean).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>');
-    if(b.assets)     items.push('<div class="bg-card"><h5>'+tt.secAssets+'</h5><p>'+esc(b.assets)+'</p></div>');
+    if(b.assets)     items.push('<div class="bg-card"><h5>'+tt.secAssets+'</h5>'+renderField(b.assets,'p')+'</div>');
     if(b.angles&&b.angles.length) items.push('<div class="bg-card"><h5>'+tt.secAngles+'</h5><ul>'+b.angles.filter(Boolean).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>');
     return '<div class="bg-grid">'+items.join('')+'</div>';
   };
@@ -488,12 +539,12 @@ function renderReport(){
     const divider = langs.length>1?'<div class="lang-divider"><div class="rep-h">'+(L==='zh'?'中文报告':'English report')+'</div></div>':'';
     return divider+
       '<div class="rep-section"><h3 class="rep-h">'+tt.secBg+'</h3>'+bgBlock(tt,c.background)+'</div>'+
-      '<div class="rep-section"><h3 class="rep-h">'+tt.secDigital+'</h3><p class="rep-p">'+(esc(c.digital)||'—')+'</p><div class="plat-mini">'+platCardsFor(tt)+'</div></div>'+
-      '<div class="rep-section"><h3 class="rep-h">'+tt.secPerc+'</h3>'+(c.perceptionMarker?'<p class="marker">'+esc(c.perceptionMarker)+'</p>':'')+'<p class="rep-p">'+(esc(c.perceptionNow)||'')+'</p></div>'+
-      '<div class="rep-section"><h3 class="rep-h">'+tt.secGap+'</h3><div class="rep-gap"><div class="gapcard"><p class="eyebrow">'+tt.percNow+'</p><p>'+(esc(c.perceptionNow)||'—')+'</p></div><div class="gapcard aim"><p class="eyebrow">'+tt.percAim+'</p><p>'+(esc(c.perceptionAim)||'—')+'</p></div></div>'+(c.gapDelta?'<div class="delta"><p class="eyebrow">'+tt.deltaLabel+'</p><p>'+esc(c.gapDelta)+'</p></div>':'')+'</div>'+
+      '<div class="rep-section"><h3 class="rep-h">'+tt.secDigital+'</h3>'+renderField(c.digital,'p')+(platCardsFor(tt)?'<div class="plat-mini">'+platCardsFor(tt)+'</div>':'')+'</div>'+
+      '<div class="rep-section"><h3 class="rep-h">'+tt.secPerc+'</h3>'+(c.perceptionMarker?'<p class="marker">'+esc(c.perceptionMarker)+'</p>':'')+renderField(c.perceptionNow,'p')+'</div>'+
+      '<div class="rep-section"><h3 class="rep-h">'+tt.secGap+'</h3><div class="rep-gap"><div class="gapcard"><p class="eyebrow">'+tt.percNow+'</p>'+renderField(c.perceptionNow,'p')+'</div><div class="gapcard aim"><p class="eyebrow">'+tt.percAim+'</p>'+renderField(c.perceptionAim,'p')+'</div></div>'+(c.gapDelta?'<div class="delta"><p class="eyebrow">'+tt.deltaLabel+'</p>'+renderField(c.gapDelta,'p')+'</div>':'')+'</div>'+
       '<div class="rep-section"><h3 class="rep-h">'+tt.secInsight+'</h3>'+list(c.insights)+'</div>'+
       '<div class="rep-section"><h3 class="rep-h">'+tt.secIP+'</h3>'+ipBlock(tt,L,c.ipIdeas)+'</div>'+
-      '<div class="rep-section"><h3 class="rep-h">'+tt.secMedia+'</h3><p class="rep-p">'+(esc(c.media)||'—')+'</p></div>';
+      '<div class="rep-section"><h3 class="rep-h">'+tt.secMedia+'</h3>'+renderField(c.media,'p')+'</div>';
   };
 
   $('#report').innerHTML=
@@ -507,8 +558,7 @@ function renderReport(){
       '<p class="rep-lead">'+(esc(cH.lead)||'')+'</p>'+
     '</div>'+
     langs.map(group).join('')+
-    (srcs?'<div class="rep-section"><h3 class="rep-h">'+tH.secSources+'</h3><div class="sources">'+srcs+'</div></div>':'')+
-    '<div class="rep-foot"><span class="slogan">'+tH.slogan+'</span><img class="logo-img" src="/smtb-logo-dark.png" alt="SMTB"></div>';
+    (srcs?'<div class="rep-section"><h3 class="rep-h">'+tH.secSources+'</h3><div class="sources">'+srcs+'</div></div>':'');
 }
 
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error('load fail'));document.head.appendChild(s);setTimeout(()=>rej(new Error('timeout')),9000);});}
@@ -525,15 +575,57 @@ async function downloadPDF(){
     if(document.fonts&&document.fonts.ready)await document.fonts.ready;
     const el=$('#report');
     const canvas=await html2canvas(el,{scale:2,backgroundColor:'#F8F6F2',useCORS:true,windowWidth:el.scrollWidth});
-    const img=canvas.toDataURL('image/jpeg',0.95);
     const jsPDF=window.jspdf.jsPDF;
     const pdf=new jsPDF('p','mm','a4');
-    const pw=pdf.internal.pageSize.getWidth(), ph=pdf.internal.pageSize.getHeight();
-    const imgW=pw, imgH=canvas.height*imgW/canvas.width;
-    let heightLeft=imgH, pos=0;
-    pdf.addImage(img,'JPEG',0,pos,imgW,imgH); heightLeft-=ph;
-    while(heightLeft>0){ pos-=ph; pdf.addPage(); pdf.addImage(img,'JPEG',0,pos,imgW,imgH); heightLeft-=ph; }
+    const pageW=pdf.internal.pageSize.getWidth();   // 210
+    const pageH=pdf.internal.pageSize.getHeight();  // 297
+    const marginX=15, marginTop=15, footerBand=14;  // mm
+    const contentW=pageW-marginX*2;
+    const contentH=pageH-marginTop-footerBand-6;    // leave a little air above footer
+    // mm per source-pixel along width
+    const mmPerPx = contentW / canvas.width;
+    // how many source-pixel rows fit in one page
+    const pxPerPage = Math.floor(contentH / mmPerPx);
+    const totalPages = Math.max(1, Math.ceil(canvas.height / pxPerPage));
     const nm=(STATE.input.nameEn||STATE.input.nameCn||'founder').replace(/[^\w\u4e00-\u9fa5-]+/g,'_');
+
+    // Pre-load footer logo
+    let footerLogo=null;
+    try{
+      const im=new Image(); im.crossOrigin='anonymous'; im.src='/smtb-logo-dark.png';
+      await new Promise((r,j)=>{im.onload=r;im.onerror=j;setTimeout(j,3000);});
+      const lc=document.createElement('canvas'); lc.width=im.naturalWidth; lc.height=im.naturalHeight;
+      lc.getContext('2d').drawImage(im,0,0);
+      footerLogo={data:lc.toDataURL('image/png'), w:im.naturalWidth, h:im.naturalHeight};
+    }catch(e){}
+
+    const tmp=document.createElement('canvas');
+    const ctx=tmp.getContext('2d');
+
+    for(let p=0;p<totalPages;p++){
+      if(p>0)pdf.addPage();
+      const srcY=p*pxPerPage;
+      const srcH=Math.min(pxPerPage, canvas.height-srcY);
+      tmp.width=canvas.width; tmp.height=srcH;
+      ctx.fillStyle='#F8F6F2'; ctx.fillRect(0,0,tmp.width,tmp.height);
+      ctx.drawImage(canvas,0,srcY,canvas.width,srcH,0,0,canvas.width,srcH);
+      const sliceImg=tmp.toDataURL('image/jpeg',0.95);
+      const drawHmm = srcH * mmPerPx;
+      pdf.addImage(sliceImg,'JPEG',marginX,marginTop,contentW,drawHmm);
+      // Footer band
+      pdf.setFillColor(3,14,34);
+      pdf.rect(0,pageH-footerBand,pageW,footerBand,'F');
+      pdf.setTextColor(254,183,54);
+      pdf.setFontSize(7.5);
+      pdf.text('SMTB · Helping founders become the person people remember', marginX, pageH-5);
+      pdf.setTextColor(255,255,255);
+      pdf.text(String(p+1)+' / '+totalPages, pageW-marginX, pageH-5, {align:'right'});
+      if(footerLogo){
+        const lhMm=5;
+        const lwMm = (footerLogo.w/footerLogo.h)*lhMm;
+        pdf.addImage(footerLogo.data,'PNG', pageW/2 - lwMm/2, pageH-footerBand+(footerBand-lhMm)/2, lwMm, lhMm);
+      }
+    }
     pdf.save('SMTB_'+nm+'_report.pdf');
   }catch(e){
     console.error('PDF failed',e);
