@@ -561,78 +561,44 @@ function renderReport(){
     (srcs?'<div class="rep-section"><h3 class="rep-h">'+tH.secSources+'</h3><div class="sources">'+srcs+'</div></div>':'');
 }
 
-function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error('load fail'));document.head.appendChild(s);setTimeout(()=>rej(new Error('timeout')),9000);});}
-async function ensurePdfLibs(){
-  if(window.html2canvas&&window.jspdf)return;
-  if(!window.html2canvas)await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
-  if(!window.jspdf)await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
-}
 async function downloadPDF(){
   const btn=$('#btnPdf'); const old=btn.innerHTML;
-  btn.disabled=true; btn.textContent='生成中…';
+  btn.disabled=true; btn.textContent='准备中…';
   try{
-    await ensurePdfLibs();
     if(document.fonts&&document.fonts.ready)await document.fonts.ready;
-    const el=$('#report');
-    const canvas=await html2canvas(el,{scale:2,backgroundColor:'#F8F6F2',useCORS:true,windowWidth:el.scrollWidth});
-    const jsPDF=window.jspdf.jsPDF;
-    const pdf=new jsPDF('p','mm','a4');
-    const pageW=pdf.internal.pageSize.getWidth();   // 210
-    const pageH=pdf.internal.pageSize.getHeight();  // 297
-    const marginX=15, marginTop=15, footerBand=14;  // mm
-    const contentW=pageW-marginX*2;
-    const contentH=pageH-marginTop-footerBand-6;    // leave a little air above footer
-    // mm per source-pixel along width
-    const mmPerPx = contentW / canvas.width;
-    // how many source-pixel rows fit in one page
-    const pxPerPage = Math.floor(contentH / mmPerPx);
-    const totalPages = Math.max(1, Math.ceil(canvas.height / pxPerPage));
     const nm=(STATE.input.nameEn||STATE.input.nameCn||'founder').replace(/[^\w\u4e00-\u9fa5-]+/g,'_');
+    const css=document.querySelector('style').innerHTML;
+    const slogan=(RL[STATE.input.outLang==='en'?'en':'zh']||RL.zh).slogan;
+    const reportHTML=$('#report').outerHTML;
+    const lastPage='<div class="last-page-finale"><p class="finale-slogan">'+esc(slogan)+'</p><img src="/smtb-logo-dark.png" class="finale-logo" alt="SMTB"></div>';
 
-    // Pre-load footer logo
-    let footerLogo=null;
-    try{
-      const im=new Image(); im.crossOrigin='anonymous'; im.src='/smtb-logo-dark.png';
-      await new Promise((r,j)=>{im.onload=r;im.onerror=j;setTimeout(j,3000);});
-      const lc=document.createElement('canvas'); lc.width=im.naturalWidth; lc.height=im.naturalHeight;
-      lc.getContext('2d').drawImage(im,0,0);
-      footerLogo={data:lc.toDataURL('image/png'), w:im.naturalWidth, h:im.naturalHeight};
-    }catch(e){}
+    const printHTML=
+      '<!doctype html><html lang="zh"><head><meta charset="utf-8"><title>SMTB_'+nm+'_report</title>'+
+      '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">'+
+      '<style>'+css+
+      '@page{size:A4;margin:0}'+
+      'html,body{margin:0;padding:0;background:#F8F6F2 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+      '.report{max-width:none !important;margin:0 !important;border:0 !important;border-radius:0 !important}'+
+      // protect from page splits: keep these blocks together
+      '.rep-section,.bg-card,.ip-cat,.ip-idea,.gapcard,.delta,.marker,.bullets li,.list li,.rep-hero,.rep-hero-banner,.plat-mini .pm{break-inside:avoid !important;page-break-inside:avoid !important}'+
+      'h1,h2,h3,h4,h5{break-after:avoid !important;page-break-after:avoid !important}'+
+      // finale block: only appears once at the end of the report
+      '.last-page-finale{break-before:page;page-break-before:always;background:#030E22;color:#fff;padding:90px 56px;min-height:60vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;border-top:3px solid #FEB736}'+
+      '.last-page-finale .finale-slogan{font-family:Cormorant Garamond,Noto Serif SC,serif;font-style:italic;font-size:28px;line-height:1.4;color:#fff;margin:0 0 32px;max-width:24ch}'+
+      '.last-page-finale .finale-logo{height:64px;width:auto;display:block}'+
+      '</style></head><body>'+
+      reportHTML+
+      lastPage+
+      '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},650);};<\/script>'+
+      '</body></html>';
 
-    const tmp=document.createElement('canvas');
-    const ctx=tmp.getContext('2d');
-
-    for(let p=0;p<totalPages;p++){
-      if(p>0)pdf.addPage();
-      const srcY=p*pxPerPage;
-      const srcH=Math.min(pxPerPage, canvas.height-srcY);
-      tmp.width=canvas.width; tmp.height=srcH;
-      ctx.fillStyle='#F8F6F2'; ctx.fillRect(0,0,tmp.width,tmp.height);
-      ctx.drawImage(canvas,0,srcY,canvas.width,srcH,0,0,canvas.width,srcH);
-      const sliceImg=tmp.toDataURL('image/jpeg',0.95);
-      const drawHmm = srcH * mmPerPx;
-      pdf.addImage(sliceImg,'JPEG',marginX,marginTop,contentW,drawHmm);
-      // Footer band
-      pdf.setFillColor(3,14,34);
-      pdf.rect(0,pageH-footerBand,pageW,footerBand,'F');
-      pdf.setTextColor(254,183,54);
-      pdf.setFontSize(7.5);
-      pdf.text('SMTB · Helping founders become the person people remember', marginX, pageH-5);
-      pdf.setTextColor(255,255,255);
-      pdf.text(String(p+1)+' / '+totalPages, pageW-marginX, pageH-5, {align:'right'});
-      if(footerLogo){
-        const lhMm=5;
-        const lwMm = (footerLogo.w/footerLogo.h)*lhMm;
-        pdf.addImage(footerLogo.data,'PNG', pageW/2 - lwMm/2, pageH-footerBand+(footerBand-lhMm)/2, lwMm, lhMm);
-      }
-    }
-    pdf.save('SMTB_'+nm+'_report.pdf');
+    const w=window.open('','_blank');
+    if(!w){ alert('浏览器挡住了新窗口,请允许弹窗后再试。'); return; }
+    w.document.open(); w.document.write(printHTML); w.document.close();
   }catch(e){
     console.error('PDF failed',e);
-    const w=window.open('','_blank');
-    if(w){const css=document.querySelector('style').innerHTML;w.document.write('<html><head><meta charset="utf-8"><title>SMTB report</title><style>'+css+' body{background:#F8F6F2;padding:20px}</style></head><body>'+$('#report').outerHTML+'</body></html>');w.document.close();setTimeout(()=>w.print(),500);}
-    else alert('无法生成 PDF——请用 Ctrl/Cmd+P 列印存成 PDF。');
-  }finally{btn.innerHTML=old;btn.disabled=false;}
+    alert('生成 PDF 失败,请重试。');
+  }finally{ btn.innerHTML=old; btn.disabled=false; }
 }
 
 function showView(v){$('#inputView').classList.toggle('on',v==='input');$('#resultView').classList.toggle('on',v==='result');window.scrollTo(0,0);}
