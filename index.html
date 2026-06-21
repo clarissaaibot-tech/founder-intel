@@ -576,20 +576,44 @@ async function downloadPDF(){
       '<!doctype html><html lang="zh"><head><meta charset="utf-8"><title>SMTB_'+nm+'_report</title>'+
       '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">'+
       '<style>'+css+
+      // Full-bleed cream — fills the page edge-to-edge, NO white border
       '@page{size:A4;margin:0}'+
       'html,body{margin:0;padding:0;background:#F8F6F2 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
-      '.report{max-width:none !important;margin:0 !important;border:0 !important;border-radius:0 !important}'+
-      // protect from page splits: keep these blocks together
-      '.rep-section,.bg-card,.ip-cat,.ip-idea,.gapcard,.delta,.marker,.bullets li,.list li,.rep-hero,.rep-hero-banner,.plat-mini .pm{break-inside:avoid !important;page-break-inside:avoid !important}'+
-      'h1,h2,h3,h4,h5{break-after:avoid !important;page-break-after:avoid !important}'+
-      // finale block: only appears once at the end of the report
-      '.last-page-finale{break-before:page;page-break-before:always;background:#030E22;color:#fff;padding:90px 56px;min-height:60vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;border-top:3px solid #FEB736}'+
-      '.last-page-finale .finale-slogan{font-family:Cormorant Garamond,Noto Serif SC,serif;font-style:italic;font-size:28px;line-height:1.4;color:#fff;margin:0 0 32px;max-width:24ch}'+
-      '.last-page-finale .finale-logo{height:64px;width:auto;display:block}'+
+      '.report{max-width:none !important;margin:0 !important;border:0 !important;border-radius:0 !important;background:#F8F6F2 !important}'+
+
+      // Internal padding — same on every section so spacing looks consistent across pages
+      '.rep-section{padding:28px 44px !important;border-top:1px solid var(--line-soft) !important}'+
+      '.rep-section:first-of-type{border-top:0 !important}'+
+      '.rep-hero{padding:32px 44px 28px !important}'+
+      '.rep-hero-banner{padding:22px 44px !important}'+
+      '.lang-divider{padding:14px 44px !important}'+
+
+      // KEEP-TOGETHER — only FINE-GRAINED items. Never protect big blocks (rep-section, rep-hero) — that forces whole-block jumps and leaves big empty space.
+      '.bg-card,.ip-idea,.bullets li,.list li,.gapcard,.delta,.marker,.plat-mini .pm{break-inside:avoid !important;page-break-inside:avoid !important}'+
+      // Heading sticks to its following content
+      '.rep-h{break-after:avoid !important;page-break-after:avoid !important}'+
+      '.bg-card h5,.ip-cat-head{break-after:avoid !important;page-break-after:avoid !important}'+
+      // Language divider: must stick to the section that follows (never appear alone at page bottom or top of a fresh page)
+      '.lang-divider{break-after:avoid !important;page-break-after:avoid !important;break-inside:avoid !important;page-break-inside:avoid !important}'+
+      // Hero: hero-banner + hero stay together (logo + name + lead), as one cover unit. Do NOT also protect rep-section after them — let next section start on same page if it fits.
+      '.rep-hero-banner{break-after:avoid !important;page-break-after:avoid !important}'+
+      '.rep-hero{break-inside:avoid !important;page-break-inside:avoid !important}'+
+      // IP category: head stays with first idea, but the cat as a whole can split across pages between ideas
+      '.ip-cat{break-inside:auto !important;page-break-inside:auto !important}'+
+      // The lead pull-quote never breaks
+      '.rep-lead{break-inside:avoid !important;page-break-inside:avoid !important}'+
+
+      // Final page with the slogan — appears only at the very end
+      '.last-page-finale{break-before:page;page-break-before:always;background:#030E22;color:#fff;padding:0 48px;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left;border-top:3px solid #FEB736;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+      '.last-page-finale .finale-slogan{font-family:Cormorant Garamond,Noto Serif SC,serif;font-style:italic;font-size:34px;line-height:1.35;color:#fff;margin:0 0 40px;max-width:22ch}'+
+      '.last-page-finale .finale-logo{height:72px;width:auto;display:block}'+
+
+      // Hide things that are screen-only (internal panel never gets this far anyway, just safety)
+      '.internal,.editnote,.eyebrow-top,.topbar,.shell>p,#inputView,#status{display:none !important}'+
       '</style></head><body>'+
       reportHTML+
       lastPage+
-      '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},650);};<\/script>'+
+      '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},700);};<\/script>'+
       '</body></html>';
 
     const w=window.open('','_blank');
