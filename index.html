@@ -6,186 +6,188 @@
 <title>SMTB · Founder IP Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* SMTB primary */
   --night:#030E22;
-  --spark:#F8F6F2;
+  --paper:#F8F6F2;
   --gold:#FEB736;
-  --gold-deep:#C68A1F;
-  /* SMTB secondary (content-type accents) */
-  --c-blue:#065DE1;
-  --c-teal:#00B1A4;
-  --c-orange:#FD6628;
-  --c-pink:#FB4792;
-  --c-purple:#772CEF;
-  /* derived neutrals */
+  --gold-deep:#A6711A;
   --ink:#030E22;
   --ink-soft:#3a4558;
-  --ink-faint:#7a8294;
-  --line:#e6e2d8;
-  --line-strong:#d3cebe;
+  --ink-faint:#8a8579;
+  --line:#dcd6c5;
+  --line-soft:#e8e3d4;
   --surface:#ffffff;
-  --paper:#F8F6F2;
-  --night-soft:#E9ECF1;
-  --gold-soft:#FFF4D9;
-  /* fonts */
-  --display:'Cormorant Garamond','Noto Sans SC',serif;
+  --display:'Cormorant Garamond','Noto Serif SC',serif;
   --body:'Inter','Noto Sans SC',ui-sans-serif,system-ui,sans-serif;
-  --mono:'Inter',ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 *{box-sizing:border-box}html,body{margin:0;padding:0}
-body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
 button{font-family:inherit;cursor:pointer}input,textarea,select{font-family:inherit}
 
-/* ---------- topbar ---------- */
-.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;background:var(--night);color:#fff;border-bottom:1px solid var(--night)}
+/* ========== TOPBAR ========== */
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 32px;background:var(--night);color:#fff;border-bottom:1px solid var(--night)}
 .brand{display:flex;align-items:center;gap:18px;min-width:0}
-.logo-img{display:block;height:56px;width:auto;flex:0 0 auto}
-.rep-hero .logo-img{height:96px;margin-bottom:10px}
-.rep-foot .logo-img{height:44px;opacity:.95}
-.brand .tag{font-family:var(--body);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);white-space:nowrap;padding-left:14px;border-left:1px solid rgba(255,255,255,.18);margin-left:2px}
-.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.btn{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:7px;padding:8px 14px;font-size:12.5px;font-weight:500;letter-spacing:.02em;display:inline-flex;align-items:center;gap:7px}
+.logo-img{display:block;height:52px;width:auto;flex:0 0 auto}
+.brand .tag{font-family:var(--body);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.55);white-space:nowrap;padding-left:16px;border-left:1px solid rgba(255,255,255,.18);font-weight:500}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.btn{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:2px;padding:9px 18px;font-size:11.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px}
 .btn:hover{border-color:var(--gold);color:var(--gold)}
 .btn.primary{background:var(--gold);color:var(--night);border-color:var(--gold);font-weight:600}
 .btn.primary:hover{background:#fff;color:var(--night);border-color:#fff}
 .btn:disabled{opacity:.4;cursor:not-allowed}
-.btn svg{width:14px;height:14px}
+.btn svg{width:13px;height:13px}
 
-.shell{max-width:1180px;margin:0 auto;padding:30px 26px 90px}
+.shell{max-width:1180px;margin:0 auto;padding:32px 28px 100px}
 .view{display:none}.view.on{display:block}
 
-/* ---------- input blocks ---------- */
-.block{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin-bottom:20px}
-.block-head{display:flex;align-items:baseline;gap:13px;margin:0 0 4px}
-.block-num{font-family:var(--body);font-size:11px;color:var(--gold-deep);font-weight:600;letter-spacing:.1em}
-.block-title{font-family:var(--display);font-size:24px;font-weight:600;margin:0;color:var(--night);letter-spacing:-.005em}
-.block-sub{font-size:12.5px;color:var(--ink-faint);margin:6px 0 18px}
+/* ========== INPUT ========== */
+.block{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:28px 30px;margin-bottom:22px}
+.block-head{display:flex;align-items:baseline;gap:14px;margin:0 0 4px}
+.block-num{font-family:var(--body);font-size:10.5px;color:var(--gold-deep);font-weight:600;letter-spacing:.16em}
+.block-title{font-family:var(--display);font-size:26px;font-weight:600;margin:0;color:var(--night);letter-spacing:-.005em}
+.block-sub{font-size:12.5px;color:var(--ink-faint);margin:6px 0 20px;font-style:italic}
 
-.grid{display:grid;gap:13px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}
 @media(max-width:640px){.g2,.g3{grid-template-columns:1fr}}
-.field{display:flex;flex-direction:column;gap:5px}
-.field label{font-size:11px;font-weight:600;color:var(--ink-soft);letter-spacing:.04em;text-transform:uppercase}
-.field input,.field select,.field textarea{border:1px solid var(--line-strong);background:#fff;border-radius:7px;padding:10px 12px;font-size:14px;color:var(--ink);width:100%;font-family:var(--body)}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--night);box-shadow:0 0 0 3px rgba(3,14,34,.08)}
-.field textarea{resize:vertical;min-height:62px;line-height:1.5}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:10.5px;font-weight:600;color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase}
+.field input,.field select,.field textarea{border:1px solid var(--line);background:#fff;border-radius:2px;padding:11px 13px;font-size:14px;color:var(--ink);width:100%;font-family:var(--body)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--night);box-shadow:0 0 0 2px rgba(254,183,54,.2)}
+.field textarea{resize:vertical;min-height:64px;line-height:1.5}
 
-.linkrow{display:grid;grid-template-columns:130px 1fr 90px 96px;gap:10px;align-items:center;margin-bottom:9px}
-.linkrow .pl{display:flex;align-items:center;gap:10px;font-weight:500;font-size:13.5px}
-.linkrow .badge{width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#fff;font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.02em}
-.linkrow input{border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font-size:13px;background:#fff}
-.linkrow .hint{font-size:9.5px;color:var(--ink-faint);font-family:var(--body);text-align:center;letter-spacing:.06em;text-transform:uppercase}
-@media(max-width:640px){.linkrow{grid-template-columns:1fr 1fr;gap:7px}.linkrow .pl{grid-column:1/-1}}
+.linkrow{display:grid;grid-template-columns:140px 1fr 96px 100px;gap:12px;align-items:center;margin-bottom:10px}
+.linkrow .pl{display:flex;align-items:center;gap:11px;font-weight:500;font-size:13.5px}
+.linkrow .badge{width:30px;height:30px;border-radius:2px;display:grid;place-items:center;color:#fff;font-family:var(--body);font-weight:700;font-size:10.5px;letter-spacing:.04em}
+.linkrow input{border:1px solid var(--line);border-radius:2px;padding:9px 11px;font-size:13px;background:#fff}
+.linkrow .hint{font-size:9.5px;color:var(--ink-faint);font-family:var(--body);text-align:center;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+@media(max-width:640px){.linkrow{grid-template-columns:1fr 1fr;gap:8px}.linkrow .pl{grid-column:1/-1}}
 
-.runbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px}
-.status{font-size:13px;color:var(--ink-soft);display:flex;align-items:center;gap:9px;min-height:20px}
-.spinner{width:15px;height:15px;border:2px solid var(--gold-soft);border-top-color:var(--gold-deep);border-radius:50%;animation:spin .8s linear infinite}
+.runbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:10px}
+.btn.run{background:var(--night);color:#fff;border-color:var(--night)}
+.btn.run:hover{background:#000;border-color:#000;color:var(--gold)}
+.status{font-size:13px;color:var(--ink-soft);display:flex;align-items:center;gap:10px;min-height:20px}
+.spinner{width:14px;height:14px;border:1.5px solid #efe6c4;border-top-color:var(--gold-deep);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.warn{background:var(--gold-soft);border:1px solid #f0d99b;color:#6e4d10;border-radius:9px;padding:11px 14px;font-size:12.5px;line-height:1.5;margin-top:14px}
-.warn b{color:var(--gold-deep)}
+.warn{background:#fbf5e6;border:1px solid #ebdda5;border-left:3px solid var(--gold);color:#5d4516;border-radius:0;padding:13px 17px;font-size:12.5px;line-height:1.55;margin-top:16px}
+.warn b{color:var(--gold-deep);font-weight:600}
 
-#jsWarn{background:#fbeaea;border:1px solid #e3b3b3;color:#9a2b2b;padding:11px 15px;border-radius:10px;margin-bottom:18px;font-size:13px;line-height:1.5}
+#jsWarn{background:#fbeaea;border:1px solid #e3b3b3;color:#9a2b2b;padding:12px 16px;border-radius:0;margin-bottom:20px;font-size:13px;line-height:1.5;border-left:3px solid #c84444}
 
-/* ---------- internal panel (on-screen only) ---------- */
-.internal{border:1.5px dashed var(--c-purple);background:#f7f3fd;border-radius:14px;padding:22px 24px;margin-bottom:22px}
-.internal .tagline{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--c-purple);font-weight:700;margin-bottom:14px}
-.internal .tagline .dot{width:7px;height:7px;border-radius:50%;background:var(--c-purple)}
-.snapshot{font-family:var(--display);font-size:22px;font-weight:600;line-height:1.35;margin:0 0 6px;color:var(--night)}
-.subline{font-size:13.5px;color:var(--ink-soft);margin:0 0 18px}
-.ice-lead{background:#fff;border:1px solid #e3d6f5;border-radius:11px;padding:15px 18px;margin-bottom:16px}
-.ice-lead h4{font-family:var(--body);font-size:11px;font-weight:700;color:var(--c-purple);margin:0 0 9px;letter-spacing:.08em;text-transform:uppercase}
-.ice-lead ul{margin:0;padding-left:18px;font-size:14px;line-height:1.55}
-.ice-lead ul li{margin-bottom:6px}
-.prep-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+/* ========== INTERNAL PANEL ========== */
+.internal{border:1px solid var(--line);border-left:3px solid var(--night);background:#fff;border-radius:0;padding:26px 30px;margin-bottom:24px}
+.internal .tagline{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin-bottom:16px}
+.internal .tagline .dot{width:5px;height:5px;border-radius:50%;background:var(--night)}
+.snapshot{font-family:var(--display);font-size:24px;font-weight:500;line-height:1.4;margin:0 0 8px;color:var(--night);font-style:italic}
+.subline{font-size:13.5px;color:var(--ink-soft);margin:0 0 22px;font-style:italic}
+.ice-lead{background:var(--paper);border:1px solid var(--line);border-radius:0;padding:18px 22px;margin-bottom:18px}
+.ice-lead h4{font-family:var(--body);font-size:10px;font-weight:700;color:var(--gold-deep);margin:0 0 11px;letter-spacing:.18em;text-transform:uppercase}
+.ice-lead ul{margin:0;padding-left:20px;font-size:14px;line-height:1.6}
+.ice-lead ul li{margin-bottom:7px}
+.prep-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 @media(max-width:640px){.prep-grid{grid-template-columns:1fr}}
-.prep h4{font-family:var(--body);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);font-weight:700;margin:0 0 7px}
-.prep ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.5}
-.prep ul li{margin-bottom:4px}
+.prep h4{font-family:var(--body);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin:0 0 9px}
+.prep ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.55}
+.prep ul li{margin-bottom:5px}
 .prep p{margin:0;font-size:13.5px}
 
-.eyebrow-top{font-family:var(--body);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 5px;font-weight:600}
-.editnote{font-size:11.5px;color:var(--ink-faint);margin:0 0 14px}
+.eyebrow-top{font-family:var(--body);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 5px;font-weight:700}
+.editnote{font-size:11.5px;color:var(--ink-faint);margin:0 0 16px;font-style:italic}
 
-/* ---------- REPORT (this is what gets PDF'd) ---------- */
-.report{max-width:880px;margin:0 auto;background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 1px 4px rgba(3,14,34,.05)}
-.rep-hero{padding:48px 52px 38px;border-bottom:1px solid var(--line);background:var(--paper);color:var(--night);position:relative;overflow:hidden}
-.rep-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;background:radial-gradient(circle,rgba(254,183,54,.22) 0%,transparent 65%);pointer-events:none}
-.rep-kicker{font-family:var(--body);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-deep);margin-top:18px;font-weight:600}
-.rep-name{font-family:var(--display);font-weight:600;font-size:46px;letter-spacing:-.015em;margin:8px 0 4px;line-height:1.04;color:var(--night)}
-.rep-name .cn{font-family:var(--body);font-size:24px;color:var(--gold-deep);font-weight:500;margin-left:14px;letter-spacing:.02em}
-.rep-meta{font-size:13.5px;color:var(--ink-soft);letter-spacing:.02em}
-.rep-lead{font-family:var(--display);font-size:19px;font-weight:500;line-height:1.55;margin:24px 0 0;max-width:64ch;color:var(--night);font-style:italic}
-.rep-lead::before{content:"";display:inline-block;width:28px;height:2px;background:var(--gold);vertical-align:middle;margin-right:14px;margin-bottom:5px}
+/* ========== REPORT — editorial print style ========== */
+.report{max-width:900px;margin:0 auto;background:var(--paper);border:1px solid var(--line);border-radius:0;overflow:hidden}
 
-.rep-section{padding:34px 52px;border-bottom:1px solid var(--line);background:var(--paper)}
-.rep-section:last-child{border-bottom:0}
-.rep-h{font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 18px;display:flex;align-items:center;gap:12px}
-.rep-h::after{content:"";flex:1;height:1px;background:var(--line-strong)}
-.rep-h2{font-family:var(--display);font-size:28px;font-weight:600;letter-spacing:-.01em;color:var(--night);margin:0 0 18px;line-height:1.15}
-.rep-p{font-size:14.5px;line-height:1.7;margin:0 0 12px;color:var(--ink);white-space:pre-wrap}
+/* HERO: dark navy banner so logo's own dark bg blends in */
+.rep-hero-banner{background:var(--night);padding:32px 56px 28px;border-bottom:3px solid var(--gold)}
+.rep-hero-banner .logo-img{height:64px}
+.rep-hero{padding:46px 56px 38px;background:var(--paper);position:relative}
+.rep-kicker{font-family:var(--body);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin:0 0 18px}
+.rep-name{font-family:var(--display);font-weight:600;font-size:54px;letter-spacing:-.02em;margin:0 0 8px;line-height:1.02;color:var(--night)}
+.rep-name .cn{font-family:var(--display);font-size:32px;color:var(--ink-soft);font-weight:500;margin-left:14px;letter-spacing:0}
+.rep-meta{font-size:13px;color:var(--ink-soft);letter-spacing:.04em;font-weight:500}
+.rep-lead{font-family:var(--display);font-size:21px;font-weight:400;line-height:1.55;margin:30px 0 0;max-width:62ch;color:var(--ink);font-style:italic;position:relative;padding-left:22px}
+.rep-lead::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--gold)}
 
-/* Background — deep, structured */
-.bg-grid{display:grid;grid-template-columns:1fr;gap:16px}
-.bg-card{border-left:2px solid var(--gold);padding:2px 0 2px 18px}
-.bg-card h5{font-family:var(--body);font-weight:600;font-size:11px;color:var(--gold-deep);margin:0 0 6px;letter-spacing:.1em;text-transform:uppercase}
-.bg-card p{margin:0;font-size:14px;line-height:1.65;color:var(--ink)}
+/* sections */
+.rep-section{padding:42px 56px;background:var(--paper);border-top:1px solid var(--line-soft)}
+.rep-section:first-of-type{border-top:0}
+.rep-h{font-family:var(--body);font-weight:700;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 24px;display:flex;align-items:center;gap:14px}
+.rep-h::before{content:"";width:24px;height:1px;background:var(--gold)}
+.rep-p{font-size:14.5px;line-height:1.75;margin:0 0 14px;color:var(--ink);white-space:pre-wrap}
 
-/* Perception */
-.marker{font-family:var(--display);font-size:24px;font-weight:500;line-height:1.4;color:var(--night);border-left:3px solid var(--gold);padding:4px 0 4px 20px;margin:6px 0 18px;font-style:italic}
-.rep-gap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+/* Background — minimal labeled paragraphs */
+.bg-grid{display:flex;flex-direction:column;gap:24px}
+.bg-card h5{font-family:var(--body);font-weight:600;font-size:10px;color:var(--ink-faint);margin:0 0 8px;letter-spacing:.18em;text-transform:uppercase}
+.bg-card p{margin:0;font-size:14.5px;line-height:1.7;color:var(--ink)}
+.bg-card ul{margin:0;padding:0;list-style:none}
+.bg-card ul li{position:relative;padding-left:24px;margin-bottom:10px;font-size:14.5px;line-height:1.65}
+.bg-card ul li::before{content:"";position:absolute;left:0;top:11px;width:14px;height:1px;background:var(--gold)}
+
+/* Perception — pull-quote style */
+.marker{font-family:var(--display);font-size:28px;font-weight:400;line-height:1.4;color:var(--night);padding:8px 0 8px 22px;margin:0 0 22px;font-style:italic;border-left:2px solid var(--gold);max-width:62ch}
+
+/* Gap — restrained two-column, no color blocks */
+.rep-gap{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:20px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 @media(max-width:640px){.rep-gap{grid-template-columns:1fr}}
-.gapcard{border:1px solid var(--line-strong);border-radius:11px;padding:16px 18px;background:#fff}
-.gapcard.aim{background:var(--night);border-color:var(--night);color:#fff}
-.gapcard.aim .eyebrow{color:var(--gold)}
-.gapcard .eyebrow{font-family:var(--body);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 6px;font-weight:600}
-.gapcard p{margin:0;font-size:14px;line-height:1.55}
-.delta{background:var(--gold-soft);border:1px solid #f0d99b;border-radius:11px;padding:14px 18px}
-.delta .eyebrow{font-family:var(--body);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 4px;font-weight:700}
-.delta p{margin:0;font-size:14px;line-height:1.55;color:#4d3608}
+.gapcard{padding:22px 24px 22px 0;border-right:1px solid var(--line)}
+.gapcard:last-child{border-right:0;padding-left:24px;padding-right:0}
+@media(max-width:640px){.gapcard{border-right:0;border-bottom:1px solid var(--line);padding:22px 0}}
+.gapcard.aim{position:relative}
+.gapcard.aim::before{content:"";position:absolute;top:0;left:24px;right:0;height:2px;background:var(--gold)}
+@media(max-width:640px){.gapcard.aim::before{left:0}}
+.gapcard .eyebrow{font-family:var(--body);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 10px;font-weight:600}
+.gapcard p{margin:0;font-size:14.5px;line-height:1.65;color:var(--ink)}
+.delta{padding:18px 0 0 22px;border-left:2px solid var(--gold);max-width:62ch}
+.delta .eyebrow{font-family:var(--body);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 6px;font-weight:700}
+.delta p{margin:0;font-size:14.5px;line-height:1.65;color:var(--ink)}
 
+/* Insights — numbered editorial list */
 .list{margin:0;padding:0;list-style:none;counter-reset:n}
-.list li{display:flex;gap:14px;align-items:flex-start;margin-bottom:13px;font-size:14.5px;line-height:1.6}
-.list li::before{counter-increment:n;content:counter(n,decimal-leading-zero);font-family:var(--body);font-weight:700;font-size:11px;color:var(--gold-deep);padding-top:3px;letter-spacing:.05em;flex:0 0 auto;min-width:22px}
+.list li{display:grid;grid-template-columns:28px 1fr;gap:18px;align-items:flex-start;margin-bottom:18px;font-size:14.5px;line-height:1.65}
+.list li::before{counter-increment:n;content:counter(n,decimal-leading-zero);font-family:var(--display);font-weight:500;font-size:18px;color:var(--gold-deep);font-style:italic;padding-top:1px}
 
-/* digital footprint */
-.plat-mini{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+/* Digital footprint */
+.plat-mini{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:18px;border-top:1px solid var(--line)}
 @media(max-width:640px){.plat-mini{grid-template-columns:1fr}}
-.plat-mini .pm{border:1px solid var(--line-strong);border-radius:10px;padding:12px 14px;display:flex;gap:11px;align-items:center;background:#fff}
-.plat-mini .badge{width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#fff;font-family:var(--body);font-weight:700;font-size:11px}
+.plat-mini .pm{padding:14px 4px;display:flex;gap:14px;align-items:center;border-bottom:1px solid var(--line-soft);border-right:1px solid var(--line-soft)}
+.plat-mini .pm:nth-child(2n){border-right:0}
+@media(max-width:640px){.plat-mini .pm{border-right:0}}
+.plat-mini .badge{width:28px;height:28px;border-radius:2px;display:grid;place-items:center;color:#fff;font-family:var(--body);font-weight:700;font-size:10px;letter-spacing:.04em}
 .plat-mini .pn{font-weight:600;font-size:13.5px}
-.plat-mini .ps{font-size:12px;color:var(--ink-soft);font-family:var(--body);margin-top:2px}
+.plat-mini .ps{font-size:12px;color:var(--ink-soft);margin-top:2px}
 
-/* IP IDEAS — the new section */
-.ip-intro{font-size:13.5px;color:var(--ink-soft);margin:0 0 22px;font-style:italic;max-width:62ch}
-.ip-cat{margin-bottom:26px}
+/* IP IDEAS — clean editorial grouping */
+.ip-intro{font-size:14px;color:var(--ink-soft);margin:0 0 32px;font-style:italic;max-width:62ch;font-family:var(--display)}
+.ip-cat{margin-bottom:36px}
 .ip-cat:last-child{margin-bottom:0}
-.ip-cat-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.ip-pill{display:inline-flex;align-items:center;gap:7px;font-family:var(--body);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;padding:5px 11px;border-radius:999px}
-.ip-pill .d{width:6px;height:6px;border-radius:50%;background:#fff}
-.ip-cat .desc{font-size:12px;color:var(--ink-faint);font-style:italic}
-.ip-ideas{display:grid;grid-template-columns:1fr;gap:10px}
-.ip-idea{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;display:grid;grid-template-columns:24px 1fr;gap:14px;align-items:flex-start}
-.ip-idea .num{font-family:var(--body);font-size:11px;font-weight:700;color:var(--gold-deep);letter-spacing:.06em;padding-top:2px}
-.ip-idea .ttl{font-family:var(--display);font-size:17px;font-weight:600;color:var(--night);line-height:1.35;margin:0 0 4px}
-.ip-idea .why{font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin:0}
-.ip-idea .why b{color:var(--gold-deep);font-weight:600}
+.ip-cat-head{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.ip-cat-num{font-family:var(--body);font-size:10px;letter-spacing:.22em;font-weight:700;color:var(--gold-deep);text-transform:uppercase}
+.ip-cat-label{font-family:var(--display);font-size:22px;font-weight:600;color:var(--night);letter-spacing:-.005em}
+.ip-cat-desc{font-size:12px;color:var(--ink-faint);font-style:italic;margin-left:auto}
+.ip-ideas{display:flex;flex-direction:column;gap:0}
+.ip-idea{padding:18px 0;border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:32px 1fr;gap:18px;align-items:flex-start}
+.ip-idea:last-child{border-bottom:0}
+.ip-idea .num{font-family:var(--display);font-size:18px;font-style:italic;color:var(--gold-deep);font-weight:500;padding-top:2px}
+.ip-idea .ttl{font-family:var(--display);font-size:20px;font-weight:600;color:var(--night);line-height:1.3;margin:0 0 6px;letter-spacing:-.005em}
+.ip-idea .why{font-size:13px;color:var(--ink-soft);line-height:1.55;margin:0}
+.ip-idea .why .lbl{font-family:var(--body);font-size:10px;font-weight:700;color:var(--gold-deep);letter-spacing:.16em;text-transform:uppercase;margin-right:8px}
 
 /* sources */
-.sources{font-size:11.5px;color:var(--ink-faint);line-height:1.7;word-break:break-all}
-.sources a{color:var(--gold-deep);text-decoration:none;border-bottom:1px dotted var(--gold-deep)}
-.sources a:hover{color:var(--night);border-bottom-color:var(--night)}
+.sources{font-size:12px;color:var(--ink-soft);line-height:1.8;word-break:break-word}
+.sources a{color:var(--gold-deep);text-decoration:none;border-bottom:1px solid transparent}
+.sources a:hover{border-bottom-color:var(--gold-deep)}
 
 /* foot */
-.rep-foot{padding:26px 52px;background:var(--paper);color:var(--night);border-top:2px solid var(--gold);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
-.rep-foot .slogan{font-family:var(--display);font-size:15px;font-style:italic;color:var(--night);letter-spacing:.01em}
-.rep-foot .mark{font-family:var(--body);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
+.rep-foot{padding:36px 56px;background:var(--night);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;border-top:3px solid var(--gold)}
+.rep-foot .slogan{font-family:var(--display);font-size:17px;font-style:italic;color:#fff;letter-spacing:.005em}
+.rep-foot .logo-img{height:42px}
 
 /* bilingual divider */
-.lang-divider{padding:18px 52px;background:var(--night-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.lang-divider .rep-h{margin:0;color:var(--night)}
+.lang-divider{padding:22px 56px;background:var(--night);border-top:1px solid var(--gold)}
+.lang-divider .rep-h{margin:0;color:var(--gold);font-size:11px}
+.lang-divider .rep-h::before{background:var(--gold)}
 
 .empty{color:var(--ink-faint);font-style:italic}
 </style>
@@ -208,9 +210,7 @@ button{font-family:inherit;cursor:pointer}input,textarea,select{font-family:inhe
 
 <div class="shell">
 
-  <!-- ============ 输入 ============ -->
   <div id="inputView" class="view on">
-
     <div id="jsWarn">⚠️ 脚本尚未运行。如果这行字一直在,请<b>重新载入页面</b>(Ctrl/Cmd + Shift + R);若仍在,代表此环境挡住了脚本。</div>
 
     <div class="block">
@@ -250,7 +250,7 @@ button{font-family:inherit;cursor:pointer}input,textarea,select{font-family:inhe
         <div class="field"><label>你已经知道的(可选)</label><textarea id="i_seed" placeholder="任何你听说过的事——作为调查的背景。"></textarea></div>
       </div>
       <div class="runbar">
-        <button class="btn primary" id="btnRun" onclick="if(window.run)run()" style="padding:11px 22px;font-size:13.5px">
+        <button class="btn run" id="btnRun" onclick="if(window.run)run()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
           开始调查
         </button>
@@ -260,9 +260,7 @@ button{font-family:inherit;cursor:pointer}input,textarea,select{font-family:inhe
     </div>
   </div>
 
-  <!-- ============ 结果 ============ -->
   <div id="resultView" class="view">
-
     <div class="internal">
       <span class="tagline"><span class="dot"></span>内部专用 · 不进下载档</span>
       <p class="snapshot" id="r_snapshot"></p>
@@ -284,17 +282,29 @@ button{font-family:inherit;cursor:pointer}input,textarea,select{font-family:inhe
 
 <script>
 const RL={
-  zh:{tagline:'SMTB Founder IP Intelligence',slogan:'Helping founders become the person people remember',secOrigin:'起点',secTrajectory:'职业轨迹',secMoments:'关键决定',secAssets:'沉淀的资产',secAngles:'可挖的角度',secBg:'背景与轨迹',secDigital:'数字足迹',secPerc:'公众观感',secGap:'差距与机会',secInsight:'我们注意到',secIP:'为他想的内容方向',ipIntro:'从他过往出发,而不是套用模板——这些是 SMTB 会建议他拍的内容方向。',secMedia:'媒体与人脉',secSources:'资料来源',percNow:'目前被看成',percAim:'其实可以拥有',deltaLabel:'差距——我们的范围',foll:'粉丝',eng:'互动',dateLoc:'zh-CN'},
-  en:{tagline:'SMTB Founder IP Intelligence',slogan:'Helping founders become the person people remember',secOrigin:'Origin',secTrajectory:'Career trajectory',secMoments:'Defining moments',secAssets:'Built-up assets',secAngles:'Angles worth digging',secBg:'Background',secDigital:'Digital footprint',secPerc:'Public perception',secGap:'Gap & opportunity',secInsight:'What we noticed',secIP:'Content directions we’d shape for them',ipIntro:'Built from their own history — not templates. These are the directions SMTB would shape for them.',secMedia:'Media & associations',secSources:'Sources',percNow:'Perceived as today',percAim:'Could be known for',deltaLabel:'The gap — our scope',foll:'followers',eng:'eng',dateLoc:undefined}
+  zh:{tagline:'SMTB Founder IP Intelligence',slogan:'Helping founders become the person people remember',
+      secOrigin:'起点',secTrajectory:'职业轨迹',secMoments:'关键决定',secAssets:'沉淀的资产',secAngles:'可挖的角度',
+      secBg:'背景与轨迹',secDigital:'数字足迹',secPerc:'公众观感',secGap:'差距与机会',secInsight:'我们注意到',
+      secIP:'为他想的内容方向',ipIntro:'从他过往出发,而不是套用模板——这些是 SMTB 会建议他拍的内容方向。',
+      secMedia:'媒体与人脉',secSources:'资料来源',
+      percNow:'目前被看成',percAim:'其实可以拥有',deltaLabel:'差距——我们的范围',
+      whyLbl:'为什么适合他',foll:'粉丝',eng:'互动',dateLoc:'zh-CN'},
+  en:{tagline:'SMTB Founder IP Intelligence',slogan:'Helping founders become the person people remember',
+      secOrigin:'Origin',secTrajectory:'Career trajectory',secMoments:'Defining moments',secAssets:'Built-up assets',secAngles:'Angles worth digging',
+      secBg:'Background',secDigital:'Digital footprint',secPerc:'Public perception',secGap:'Gap & opportunity',secInsight:'What we noticed',
+      secIP:'Content directions we’d shape for them',ipIntro:'Built from their own history — not templates. These are the directions SMTB would shape for them.',
+      secMedia:'Media & associations',secSources:'Sources',
+      percNow:'Perceived as today',percAim:'Could be known for',deltaLabel:'The gap — our scope',
+      whyLbl:'Why this fits him',foll:'followers',eng:'eng',dateLoc:undefined}
 };
 
 const IP_CATS=[
-  {key:'story',  zh:'故事型',  en:'Story',     color:'#FD6628', desc:{zh:'他亲身经历能拍的故事',     en:'Stories from his own life'}},
-  {key:'opinion',zh:'观点型',  en:'Opinion',   color:'#065DE1', desc:{zh:'他显然有立场但还没系统讲过', en:'Takes he holds but hasn’t articulated'}},
-  {key:'howto',  zh:'教程型',  en:'How-to',    color:'#00B1A4', desc:{zh:'他做过的事可以教别人怎么做', en:'Things he can teach others to do'}},
-  {key:'convo',  zh:'对话型',  en:'Conversation',color:'#772CEF',desc:{zh:'可约访的人 / 行业话题',     en:'People to interview / industry talks'}},
-  {key:'contra', zh:'反差型',  en:'Contrast',  color:'#FB4792', desc:{zh:'他被低估、被误解或没人知道的一面', en:'The underrated / misread side of him'}},
-  {key:'topical',zh:'时事型',  en:'Topical',   color:'#FEB736', desc:{zh:'结合行业当下他能立刻有话说的', en:'Industry moments he can speak to now'}}
+  {key:'story',  zh:'故事',  en:'Story',        descZh:'他亲身经历能拍的故事',     descEn:'Stories from his own life'},
+  {key:'opinion',zh:'观点',  en:'Opinion',      descZh:'他显然有立场但还没系统讲过', descEn:'Takes he holds but hasn’t articulated'},
+  {key:'howto',  zh:'教学',  en:'How-to',       descZh:'他做过的事可以教别人怎么做', descEn:'Things he can teach others'},
+  {key:'convo',  zh:'对话',  en:'Conversation', descZh:'可约访的人 / 行业话题',     descEn:'People to interview / industry talks'},
+  {key:'contra', zh:'反差',  en:'Contrast',     descZh:'他被低估、被误解或没人知道的一面', descEn:'His underrated / misread side'},
+  {key:'topical',zh:'时事',  en:'Topical',      descZh:'结合行业当下他能立刻有话说', descEn:'Industry moments he can speak to'}
 ];
 
 const PLATFORMS=[
@@ -302,13 +312,12 @@ const PLATFORMS=[
   {id:'x',name:'X / Twitter',color:'#030E22',abbr:'X'},
   {id:'ig',name:'Instagram',color:'#C8377B',abbr:'IG'},
   {id:'yt',name:'YouTube',color:'#C8261C',abbr:'YT'},
-  {id:'tt',name:'TikTok',color:'#11A8A0',abbr:'TT'},
+  {id:'tt',name:'TikTok',color:'#11A8A0',abbr:'TT'}
 ];
 const $=s=>document.querySelector(s);
 const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const STATE={input:{},links:{},composed:null,research:null};
 
-/* ---------- Claude API ---------- */
 async function callClaude(prompt, useSearch){
   const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt,useSearch})});
   if(!res.ok){ let msg=res.status; try{const j=await res.json(); if(j&&j.error)msg=(typeof j.error==='string'?j.error:JSON.stringify(j.error));}catch(e){} throw new Error("api "+msg); }
@@ -317,79 +326,36 @@ async function callClaude(prompt, useSearch){
   for(let k=texts.length-1;k>=0;k--){ if(texts[k].includes("{")) return texts[k]; }
   return texts.join("\n");
 }
+
 function parseJSON(txt){
   const original=txt||'';
   let s=original.replace(/```json/gi,'').replace(/```/g,'');
   const start=s.indexOf('{');
-  if(start<0){
-    const preview=original.slice(0,500);
-    console.error('No JSON in response. Claude returned:\n', txt);
-    throw new Error('Claude 没有回 JSON。它回的内容(前 500 字):\n\n'+preview);
-  }
+  if(start<0){ throw new Error('Claude 没有回 JSON。它回的内容(前 500 字):\n\n'+original.slice(0,500)); }
   s=s.slice(start);
   const tryP=x=>{try{return JSON.parse(x);}catch(e){return undefined;}};
-  // strategy 1: direct
   let r=tryP(s); if(r)return r;
-  // strategy 2: trailing comma cleanup + dangling colon before close
   let s2=s.replace(/,\s*([}\]])/g,'$1').replace(/:\s*([,}\]])/g,':null$1');
   r=tryP(s2); if(r)return r;
-  // strategy 3: control chars in strings (literal newlines/tabs) → escape them
-  const escapeControlChars=str=>{
-    let out='',inStr=false,escd=false;
-    for(let k=0;k<str.length;k++){
-      const ch=str[k];
-      if(inStr){
-        if(escd){out+=ch;escd=false;continue;}
-        if(ch==='\\'){out+=ch;escd=true;continue;}
-        if(ch==='"'){out+=ch;inStr=false;continue;}
-        if(ch==='\n'){out+='\\n';continue;}
-        if(ch==='\r'){out+='\\r';continue;}
-        if(ch==='\t'){out+='\\t';continue;}
-        out+=ch;
-      }else{
-        if(ch==='"')inStr=true;
-        out+=ch;
-      }
-    }
-    return out;
-  };
-  r=tryP(escapeControlChars(s)); if(r)return r;
-  r=tryP(escapeControlChars(s).replace(/,\s*([}\]])/g,'$1')); if(r)return r;
-  // strategy 4: find the longest balanced object from the start
+  const escapeCtrl=str=>{let out='',inStr=false,escd=false;for(let k=0;k<str.length;k++){const ch=str[k];if(inStr){if(escd){out+=ch;escd=false;continue;}if(ch==='\\'){out+=ch;escd=true;continue;}if(ch==='"'){out+=ch;inStr=false;continue;}if(ch==='\n'){out+='\\n';continue;}if(ch==='\r'){out+='\\r';continue;}if(ch==='\t'){out+='\\t';continue;}out+=ch;}else{if(ch==='"')inStr=true;out+=ch;}}return out;};
+  r=tryP(escapeCtrl(s)); if(r)return r;
+  r=tryP(escapeCtrl(s).replace(/,\s*([}\]])/g,'$1')); if(r)return r;
   let stack=[],inStr=false,escd=false,endIdx=-1;
-  for(let k=0;k<s.length;k++){
-    const ch=s[k];
-    if(inStr){ if(escd)escd=false; else if(ch==='\\')escd=true; else if(ch==='"')inStr=false; continue; }
-    if(ch==='"'){inStr=true;continue;}
-    if(ch==='{'||ch==='[')stack.push(ch);
-    else if(ch==='}'||ch===']'){stack.pop(); if(stack.length===0&&endIdx<0)endIdx=k+1;}
-  }
-  if(endIdx>0){
-    const cut=s.slice(0,endIdx);
-    let r2=tryP(cut); if(r2)return r2;
-    r2=tryP(escapeControlChars(cut)); if(r2)return r2;
-  }
-  // strategy 5: rebuild closing brackets + escape controls
-  let out=s;
-  if(inStr)out+='"';
-  out=out.replace(/,\s*$/,'').replace(/:\s*$/,':null');
+  for(let k=0;k<s.length;k++){const ch=s[k];if(inStr){if(escd)escd=false;else if(ch==='\\')escd=true;else if(ch==='"')inStr=false;continue;}if(ch==='"'){inStr=true;continue;}if(ch==='{'||ch==='[')stack.push(ch);else if(ch==='}'||ch===']'){stack.pop();if(stack.length===0&&endIdx<0)endIdx=k+1;}}
+  if(endIdx>0){const cut=s.slice(0,endIdx);let r2=tryP(cut);if(r2)return r2;r2=tryP(escapeCtrl(cut));if(r2)return r2;}
+  let out=s;if(inStr)out+='"';out=out.replace(/,\s*$/,'').replace(/:\s*$/,':null');
   for(let k=stack.length-1;k>=0;k--)out+=(stack[k]==='{'?'}':']');
   out=out.replace(/,\s*([}\]])/g,'$1');
   r=tryP(out); if(r)return r;
-  r=tryP(escapeControlChars(out)); if(r)return r;
-  // total failure — surface what we got, so analyst can paste to dev
-  console.warn('Unparseable response. Full text:\n',original);
-  const preview=original.slice(0,800);
-  throw new Error('JSON 解析失败。Claude 回的内容前 800 字(请截图给开发者):\n\n'+preview);
+  r=tryP(escapeCtrl(out)); if(r)return r;
+  throw new Error('JSON 解析失败。Claude 回的内容前 800 字(请截图给开发者):\n\n'+original.slice(0,800));
 }
 
 function gather(){
   const v=id=>$('#'+id).value.trim();
   STATE.input={nameEn:v('i_nameEn'),nameCn:v('i_nameCn'),company:v('i_company'),role:v('i_role'),industry:v('i_industry'),stage:v('i_stage'),location:v('i_location'),website:v('i_website'),outLang:$('#i_outLang').value,seed:v('i_seed')};
   STATE.links={};
-  PLATFORMS.forEach(p=>{
-    STATE.links[p.id]={url:document.querySelector('[data-link="'+p.id+'"]').value.trim(),foll:document.querySelector('[data-foll="'+p.id+'"]').value.trim(),eng:document.querySelector('[data-eng="'+p.id+'"]').value.trim()};
-  });
+  PLATFORMS.forEach(p=>{STATE.links[p.id]={url:document.querySelector('[data-link="'+p.id+'"]').value.trim(),foll:document.querySelector('[data-foll="'+p.id+'"]').value.trim(),eng:document.querySelector('[data-eng="'+p.id+'"]').value.trim()};});
 }
 
 async function run(){
@@ -401,70 +367,51 @@ async function run(){
   const btn=$('#btnRun');btn.disabled=true;
   const setStatus=(t,sp)=>$('#status').innerHTML=(sp?'<span class="spinner"></span>':'')+esc(t);
   try{
-    // ===== RESEARCH: deeper, structured =====
-    setStatus('正在深入调查公开网络…',true);
+    setStatus('正在调查公开网络…',true);
     const linkList=PLATFORMS.filter(p=>STATE.links[p.id].url).map(p=>p.name+': '+STATE.links[p.id].url).join('\n');
-    const rPrompt=`Investigate this founder using web search. The goal is to understand their PAST so the meeting team grasps who they are in 2 minutes. Be specific and factual; if unsure, mark in confidence. Don't pad.
+    const rPrompt=`Investigate this founder using web search. Goal: understand their PAST so the meeting team grasps who they are in 2 minutes. Be specific and factual.
 
-Person: ${i.nameEn} ${i.nameCn?'(Chinese name: '+i.nameCn+')':''}
+Person: ${i.nameEn} ${i.nameCn?'(Chinese: '+i.nameCn+')':''}
 Company: ${i.company}; Role: ${i.role}; Industry: ${i.industry}; Location: ${i.location}
 Links:
 ${linkList}
 ${i.seed?'Analyst note: '+i.seed:''}
 
-CRITICAL OUTPUT RULES — read carefully:
-- Your ENTIRE response must be a single valid JSON object — RAW JSON only.
-- Do NOT wrap in markdown code blocks. Do NOT write \`\`\`json or \`\`\`. Just the bare { ... } object.
-- Do NOT explain, apologize, or comment. Do NOT say "I cannot" — instead return the JSON with empty strings and mark confidence="low".
-- If you find nothing on this person, STILL return the JSON skeleton with empty values and confidence="low" with an explanation in that field. Do not refuse.
-- JSON STRING SAFETY: inside any string value, never include raw newlines or tab characters; never include unescaped double-quotes. If you want to quote someone, use single quotes 'like this'. Keep every string on a single line.
-- This is internal research about a public-facing founder for a meeting prep; their links are provided by them.
+OUTPUT RULES:
+- Reply with RAW JSON only. No markdown, no code fences, no prose before or after.
+- Never refuse. If thin, return JSON with empty strings and confidence="low".
+- Inside string values: no raw newlines/tabs/unescaped double-quotes. Use single quotes for quotations. Each string on one line.
 
-For each field, give concrete specifics (years, names of companies/schools, project names, turning-point events) — not generic descriptions.
+For each field, give concrete specifics (years, names, project names) — not generic descriptions. Max 5 sources.
 
-JSON shape (max 5 sources, fields trimmed):
-{
-  "origin": "where they're from, schooling, first job — concrete, with names/years if found",
-  "trajectory": "career path as a paragraph: each role, why they moved, what they built",
-  "definingMoments": ["specific event/decision","another","another"],
-  "assets": "what they've built that's still useful today: notable projects, IP, networks, expertise",
-  "anglesToDig": ["non-obvious thread worth pulling","another"],
-  "currentWork": "what they're focused on right now",
-  "perception": "how the public reads them today",
-  "media": "press, podcasts, speaking, notable appearances — name them",
-  "associations": "notable people connected to them",
-  "recentActivity": "what they've posted/said/done in last 3 months",
-  "languageUse": "which language(s) they post in and what audience that reaches",
-  "confidence": "high|medium|low — note on data quality and any uncertainties (e.g. name collisions, sparse local data)",
-  "sources": [{"title":"","url":""}]
-}`;
+{"origin":"","trajectory":"","definingMoments":["","",""],"assets":"","anglesToDig":["",""],"currentWork":"","perception":"","media":"","associations":"","recentActivity":"","languageUse":"","confidence":"","sources":[{"title":"","url":""}]}`;
     const research=parseJSON(await callClaude(rPrompt,true));
     STATE.research=research;
 
-    // ===== COMPOSE: language-specific report (parallel for bilingual) =====
     const langs = i.outLang==='both' ? ['zh','en'] : [i.outLang];
     setStatus(langs.length>1?'正在并行撰写双语报告…':'正在撰写报告…',true);
     const buildCPrompt=(L)=>{
       const langName=L==='zh'?'Simplified Chinese':'English';
-      return `You write founder IP-assessment reports for SMTB Media — a firm that helps founders "become the person people remember". Use ONLY the verified findings provided; do not invent facts.
+      return `You write founder IP-assessment reports for SMTB Media — a firm that helps founders "become the person people remember". Use ONLY the verified findings; do not invent facts.
 
-CRITICAL OUTPUT RULES:
-- Your ENTIRE response must be a single valid JSON object — RAW JSON only.
-- Do NOT wrap in markdown code blocks. Do NOT write \`\`\`json or \`\`\`. Just the bare { ... } object.
-- Do NOT explain, apologize, or refuse. If findings are thin, return JSON with brief honest content (e.g. "research limited") — never refuse.
-- JSON STRING SAFETY: never put raw newlines, tabs, or unescaped double-quotes inside string values. To quote someone, use single quotes 'like this'. Keep each string on a single line.
-- Keep each text field UNDER 50 words. Be tight, specific, non-generic.
+OUTPUT RULES:
+- Reply with RAW JSON only. No markdown, no code fences. Bare { ... } only.
+- Never refuse. If findings are thin, write briefly and honestly.
+- Inside string values: no raw newlines/tabs/unescaped double-quotes. Use single quotes for quotations. Each string on one line.
+- Every text field under 50 words. Be tight, specific, non-generic.
 
 FINDINGS: ${JSON.stringify(research)}
 SUBJECT: ${i.nameEn} ${i.nameCn} — ${i.role} at ${i.company}, ${i.industry}, ${i.location}.
 
-The report has two jobs: (1) let our team understand his PAST in 2 minutes, (2) make him feel genuinely researched. The "insights" must reference concrete details from findings.
+The "insights" must reference concrete facts from findings.
+For "ipIdeas": 6 categories × exactly 3 ideas. Each idea = clickable title + one-sentence "why" tying to a specific finding fact.
 
-For "ipIdeas": content directions SHAPED FROM HIS PAST — not generic advice. Exactly 3 ideas per category. Each idea = clickable title + one-sentence "why this fits him" citing a specific finding fact.
+LANGUAGE — STRICT:
+- Write these IN ${langName} (no exceptions, no mixing): lead, background.*, digital, perceptionMarker, perceptionNow, perceptionAim, gapDelta, insights, media, AND every ipIdeas title AND every ipIdeas why field.
+- Write snapshot, perceptionLine, and ALL meetingPrep fields in Simplified Chinese (internal team only).
+- If ${langName} is English: do NOT include any Chinese characters in the public-facing fields above.
 
-LANGUAGE: write lead, background fields, digital, perceptionMarker, perceptionNow, perceptionAim, gapDelta, insights, media, and all ipIdeas in ${langName}. Always write snapshot, perceptionLine, and meetingPrep fields in Simplified Chinese.
-
-Return JSON (each field tight, max 3 items in every array):
+Return JSON:
 {"lead":"","background":{"origin":"","trajectory":"","moments":["","",""],"assets":"","angles":["",""]},"digital":"","perceptionMarker":"","perceptionNow":"","perceptionAim":"","gapDelta":"","insights":["","",""],"ipIdeas":{"story":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"opinion":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"howto":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"convo":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"contra":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}],"topical":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}]},"media":"","snapshot":"","perceptionLine":"","meetingPrep":{"icebreakers":["",""],"questions":["",""],"sensitive":[""],"mutual":""}}`;
     };
     const results=await Promise.all(langs.map(L=>callClaude(buildCPrompt(L),false).then(parseJSON)));
@@ -477,8 +424,7 @@ Return JSON (each field tight, max 3 items in every array):
     showView('result');
   }catch(e){
     console.error(e);
-    const msg=(e.message||String(e));
-    $('#status').innerHTML='<div style="color:#a63b08;white-space:pre-wrap;font-size:12.5px;line-height:1.5;max-width:680px"><b>出错了:</b>\n'+esc(msg)+'</div>';
+    $('#status').innerHTML='<div style="color:#a63b08;white-space:pre-wrap;font-size:12.5px;line-height:1.5;max-width:680px"><b>出错了:</b>\n'+esc(e.message||String(e))+'</div>';
   }finally{btn.disabled=false;}
 }
 
@@ -503,8 +449,8 @@ function renderReport(){
   const heroLang=langs[0], tH=RL[heroLang], cH=STATE.composed[heroLang];
   const nameLine=esc(i.nameEn||i.nameCn)+(i.nameEn&&i.nameCn?'<span class="cn">'+esc(i.nameCn)+'</span>':'');
   const meta=[i.role,i.company,i.industry,i.location].filter(Boolean).join(' · ');
-  const srcs=(STATE.research && STATE.research.sources||[]).filter(s=>s&&s.url).map(s=>'<a href="'+esc(s.url)+'" target="_blank">'+esc(s.title||s.url)+'</a>').join(' · ');
-  const list=(arr)=>'<ul class="list">'+(arr||[]).filter(Boolean).map(x=>'<li><span>'+esc(x)+'</span></li>').join('')+'</ul>';
+  const srcs=(STATE.research && STATE.research.sources||[]).filter(s=>s&&s.url).map(s=>'<a href="'+esc(s.url)+'" target="_blank">'+esc(s.title||s.url)+'</a>').join('  ·  ');
+  const list=arr=>'<ul class="list">'+(arr||[]).filter(Boolean).map(x=>'<li><span>'+esc(x)+'</span></li>').join('')+'</ul>';
   const platCardsFor=tt=>PLATFORMS.filter(p=>STATE.links[p.id].url||STATE.links[p.id].foll).map(p=>{
     const d=STATE.links[p.id];
     const stats=[d.foll&&(esc(d.foll)+' '+tt.foll),d.eng&&(esc(d.eng)+' '+tt.eng)].filter(Boolean).join(' · ');
@@ -513,25 +459,26 @@ function renderReport(){
 
   const bgBlock=(tt,b)=>{
     if(!b)return '';
-    const rows=[];
-    if(b.origin)     rows.push('<div class="bg-card"><h5>'+tt.secOrigin+'</h5><p>'+esc(b.origin)+'</p></div>');
-    if(b.trajectory) rows.push('<div class="bg-card"><h5>'+tt.secTrajectory+'</h5><p>'+esc(b.trajectory)+'</p></div>');
-    if(b.moments&&b.moments.length) rows.push('<div class="bg-card"><h5>'+tt.secMoments+'</h5>'+list(b.moments)+'</div>');
-    if(b.assets)     rows.push('<div class="bg-card"><h5>'+tt.secAssets+'</h5><p>'+esc(b.assets)+'</p></div>');
-    if(b.angles&&b.angles.length) rows.push('<div class="bg-card"><h5>'+tt.secAngles+'</h5>'+list(b.angles)+'</div>');
-    return '<div class="bg-grid">'+rows.join('')+'</div>';
+    const items=[];
+    if(b.origin)     items.push('<div class="bg-card"><h5>'+tt.secOrigin+'</h5><p>'+esc(b.origin)+'</p></div>');
+    if(b.trajectory) items.push('<div class="bg-card"><h5>'+tt.secTrajectory+'</h5><p>'+esc(b.trajectory)+'</p></div>');
+    if(b.moments&&b.moments.length) items.push('<div class="bg-card"><h5>'+tt.secMoments+'</h5><ul>'+b.moments.filter(Boolean).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>');
+    if(b.assets)     items.push('<div class="bg-card"><h5>'+tt.secAssets+'</h5><p>'+esc(b.assets)+'</p></div>');
+    if(b.angles&&b.angles.length) items.push('<div class="bg-card"><h5>'+tt.secAngles+'</h5><ul>'+b.angles.filter(Boolean).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>');
+    return '<div class="bg-grid">'+items.join('')+'</div>';
   };
 
-  const ipBlock=(tt,ip)=>{
+  const ipBlock=(tt,L,ip)=>{
     if(!ip)return '<p class="empty">—</p>';
-    return '<p class="ip-intro">'+esc(tt.ipIntro)+'</p>'+IP_CATS.map(cat=>{
+    return '<p class="ip-intro">'+esc(tt.ipIntro)+'</p>'+IP_CATS.map((cat,n)=>{
       const ideas=(ip[cat.key]||[]).filter(x=>x&&(x.title||x.why));
       if(!ideas.length)return '';
-      const label=heroLang==='zh'?cat.zh:cat.en;
-      const desc =heroLang==='zh'?cat.desc.zh:cat.desc.en;
+      const label=L==='zh'?cat.zh:cat.en;
+      const desc =L==='zh'?cat.descZh:cat.descEn;
+      const num=String(n+1).padStart(2,'0');
       return '<div class="ip-cat">'+
-        '<div class="ip-cat-head"><span class="ip-pill" style="background:'+cat.color+'"><span class="d"></span>'+label+'</span><span class="desc">'+desc+'</span></div>'+
-        '<div class="ip-ideas">'+ideas.map((x,n)=>'<div class="ip-idea"><span class="num">'+String(n+1).padStart(2,'0')+'</span><div><h4 class="ttl">'+esc(x.title||'')+'</h4>'+(x.why?'<p class="why"><b>为什么适合他 · </b>'+esc(x.why)+'</p>':'')+'</div></div>').join('')+'</div>'+
+        '<div class="ip-cat-head"><span class="ip-cat-num">'+num+'</span><span class="ip-cat-label">'+label+'</span><span class="ip-cat-desc">'+desc+'</span></div>'+
+        '<div class="ip-ideas">'+ideas.map((x,k)=>'<div class="ip-idea"><span class="num">'+String(k+1).padStart(2,'0')+'</span><div><h4 class="ttl">'+esc(x.title||'')+'</h4>'+(x.why?'<p class="why"><span class="lbl">'+tt.whyLbl+'</span>'+esc(x.why)+'</p>':'')+'</div></div>').join('')+'</div>'+
       '</div>';
     }).join('');
   };
@@ -542,16 +489,18 @@ function renderReport(){
     return divider+
       '<div class="rep-section"><h3 class="rep-h">'+tt.secBg+'</h3>'+bgBlock(tt,c.background)+'</div>'+
       '<div class="rep-section"><h3 class="rep-h">'+tt.secDigital+'</h3><p class="rep-p">'+(esc(c.digital)||'—')+'</p><div class="plat-mini">'+platCardsFor(tt)+'</div></div>'+
-      '<div class="rep-section"><h3 class="rep-h">'+tt.secPerc+'</h3>'+(c.perceptionMarker?'<p class="marker">"'+esc(c.perceptionMarker)+'"</p>':'')+'<p class="rep-p">'+(esc(c.perceptionNow)||'')+'</p></div>'+
+      '<div class="rep-section"><h3 class="rep-h">'+tt.secPerc+'</h3>'+(c.perceptionMarker?'<p class="marker">'+esc(c.perceptionMarker)+'</p>':'')+'<p class="rep-p">'+(esc(c.perceptionNow)||'')+'</p></div>'+
       '<div class="rep-section"><h3 class="rep-h">'+tt.secGap+'</h3><div class="rep-gap"><div class="gapcard"><p class="eyebrow">'+tt.percNow+'</p><p>'+(esc(c.perceptionNow)||'—')+'</p></div><div class="gapcard aim"><p class="eyebrow">'+tt.percAim+'</p><p>'+(esc(c.perceptionAim)||'—')+'</p></div></div>'+(c.gapDelta?'<div class="delta"><p class="eyebrow">'+tt.deltaLabel+'</p><p>'+esc(c.gapDelta)+'</p></div>':'')+'</div>'+
       '<div class="rep-section"><h3 class="rep-h">'+tt.secInsight+'</h3>'+list(c.insights)+'</div>'+
-      '<div class="rep-section"><h3 class="rep-h">'+tt.secIP+'</h3>'+ipBlock(tt,c.ipIdeas)+'</div>'+
+      '<div class="rep-section"><h3 class="rep-h">'+tt.secIP+'</h3>'+ipBlock(tt,L,c.ipIdeas)+'</div>'+
       '<div class="rep-section"><h3 class="rep-h">'+tt.secMedia+'</h3><p class="rep-p">'+(esc(c.media)||'—')+'</p></div>';
   };
 
   $('#report').innerHTML=
+    '<div class="rep-hero-banner">'+
+      '<img class="logo-img" src="/smtb-logo-dark.png" alt="SMTB Media">'+
+    '</div>'+
     '<div class="rep-hero">'+
-      '<img class="logo-img" src="/smtb-logo-cream.png" alt="SMTB Media">'+
       '<div class="rep-kicker">'+tH.tagline+' · '+new Date().toLocaleDateString(tH.dateLoc,{year:'numeric',month:'long',day:'numeric'})+'</div>'+
       '<h1 class="rep-name">'+nameLine+'</h1>'+
       '<div class="rep-meta">'+(meta||'—')+'</div>'+
@@ -559,10 +508,9 @@ function renderReport(){
     '</div>'+
     langs.map(group).join('')+
     (srcs?'<div class="rep-section"><h3 class="rep-h">'+tH.secSources+'</h3><div class="sources">'+srcs+'</div></div>':'')+
-    '<div class="rep-foot"><span class="slogan">'+tH.slogan+'</span><img class="logo-img" src="/smtb-logo-cream.png" alt="SMTB"></div>';
+    '<div class="rep-foot"><span class="slogan">'+tH.slogan+'</span><img class="logo-img" src="/smtb-logo-dark.png" alt="SMTB"></div>';
 }
 
-/* ---------- PDF ---------- */
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error('load fail'));document.head.appendChild(s);setTimeout(()=>rej(new Error('timeout')),9000);});}
 async function ensurePdfLibs(){
   if(window.html2canvas&&window.jspdf)return;
@@ -588,23 +536,20 @@ async function downloadPDF(){
     const nm=(STATE.input.nameEn||STATE.input.nameCn||'founder').replace(/[^\w\u4e00-\u9fa5-]+/g,'_');
     pdf.save('SMTB_'+nm+'_report.pdf');
   }catch(e){
-    console.error('PDF failed, falling back to print',e);
+    console.error('PDF failed',e);
     const w=window.open('','_blank');
-    if(w){
-      const css=document.querySelector('style').innerHTML;
-      w.document.write('<html><head><meta charset="utf-8"><title>SMTB report</title><style>'+css+' body{background:#F8F6F2;padding:20px}</style></head><body>'+$('#report').outerHTML+'</body></html>');
-      w.document.close(); setTimeout(()=>w.print(),500);
-    } else alert('无法生成 PDF——请用浏览器的列印功能(Ctrl/Cmd+P)存成 PDF。');
-  }finally{ btn.innerHTML=old; btn.disabled=false; }
+    if(w){const css=document.querySelector('style').innerHTML;w.document.write('<html><head><meta charset="utf-8"><title>SMTB report</title><style>'+css+' body{background:#F8F6F2;padding:20px}</style></head><body>'+$('#report').outerHTML+'</body></html>');w.document.close();setTimeout(()=>w.print(),500);}
+    else alert('无法生成 PDF——请用 Ctrl/Cmd+P 列印存成 PDF。');
+  }finally{btn.innerHTML=old;btn.disabled=false;}
 }
 
 function showView(v){$('#inputView').classList.toggle('on',v==='input');$('#resultView').classList.toggle('on',v==='result');window.scrollTo(0,0);}
 function resetAll(){document.querySelectorAll('input,textarea').forEach(el=>el.value='');$('#i_outLang').value='zh';STATE.composed=null;STATE.research=null;$('#btnPdf').disabled=true;$('#status').innerHTML='';showView('input');}
-try{ $('#btnRun').addEventListener('click',run); }catch(e){}
-try{ $('#btnPdf').addEventListener('click',downloadPDF); }catch(e){}
-try{ $('#btnNew').addEventListener('click',resetAll); }catch(e){}
-window.run=run; window.downloadPDF=downloadPDF; window.resetAll=resetAll;
-var _jw=document.getElementById('jsWarn'); if(_jw)_jw.style.display='none';
+try{$('#btnRun').addEventListener('click',run);}catch(e){}
+try{$('#btnPdf').addEventListener('click',downloadPDF);}catch(e){}
+try{$('#btnNew').addEventListener('click',resetAll);}catch(e){}
+window.run=run;window.downloadPDF=downloadPDF;window.resetAll=resetAll;
+var _jw=document.getElementById('jsWarn');if(_jw)_jw.style.display='none';
 </script>
 </body>
 </html>
