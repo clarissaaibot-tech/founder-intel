@@ -616,6 +616,7 @@ Return JSON:
     const results=await Promise.all(langs.map(L=>callClaude(buildCPrompt(L),false).then(parseJSON)));
     STATE.composed={};
     langs.forEach((L,idx)=>{STATE.composed[L]=results[idx];});
+    scrubAge(STATE.composed);
 
     setStatus('完成——请在下方核对。',false);
     $('#btnPdf').disabled=false;
@@ -628,6 +629,52 @@ Return JSON:
 }
 
 function primaryComposed(){ if(!STATE.composed)return null; return STATE.composed.zh||STATE.composed.en||Object.values(STATE.composed)[0]; }
+
+// Remove age references from client-facing fields only. Internal fields keep them.
+// Handles: "age 31", "31 years old", "at age ~26", "(age ~24)", "31岁", "约35-36岁", "30 岁左右", "2020年资料推估为30岁", and surrounding orphan words.
+function stripAgeFromText(s){
+  if(typeof s!=='string') return s;
+  let out=s;
+  // English patterns — match prefix "at" first so it doesn't strand
+  out=out.replace(/\s*\(\s*age[d]?\s*~?\s*\d{1,3}\s*\)/gi,'');                       // (age 31), (aged ~26)
+  out=out.replace(/(?:\s+at)?\s+aged?\s*~?\s*\d{1,3}(?:\s*years?\s*old)?\b/gi,'');   // at age 26, age 31, aged ~24
+  out=out.replace(/\s*\d{1,3}\s*[-–]?\s*years?\s*old\b/gi,'');                       // 31 years old, 31-year-old
+  // Chinese patterns — also strip leading 现年/年约/约 and trailing 左右
+  out=out.replace(/\(\s*\d{4}\s*年\s*资料推估为?\s*\d{1,3}\s*岁\s*\)/g,'');             // (2020年资料推估为30岁)
+  out=out.replace(/(?:现年|年约|约)?\s*\d{1,3}\s*[-－—~]?\s*\d{0,3}\s*岁(?:左右)?/g,''); // 现年32-35岁, 约35-36岁, 30岁左右
+  // Clean up: stranded punctuation, double spaces, empty parens, dangling commas before period
+  out=out.replace(/\(\s*\)/g,'');
+  out=out.replace(/\(\s*([,，;；])\s*/g,'(');                  // (, ... → (...
+  out=out.replace(/\s*([,，;；])\s*\)/g,')');                  // ..., ) → ...)
+  out=out.replace(/[,，]\s*[,，]/g,',');                        // double commas
+  out=out.replace(/^[\s,，;；的]+/,'');                         // leading punctuation / orphan 的
+  out=out.replace(/[,，]\s*([。.])/g,'$1');                    // comma right before period
+  out=out.replace(/\s{2,}/g,' ');
+  out=out.trim();
+  return out;
+}
+function stripAgeDeep(val){
+  if(val==null) return val;
+  if(typeof val==='string') return stripAgeFromText(val);
+  if(Array.isArray(val)) return val.map(stripAgeDeep);
+  if(typeof val==='object'){
+    const o={};
+    for(const k in val) o[k]=stripAgeDeep(val[k]);
+    return o;
+  }
+  return val;
+}
+function scrubAge(composed){
+  if(!composed) return;
+  // Only scrub CLIENT-FACING fields. Internal fields stay candid.
+  const clientFields=['lead','background','digital','media'];
+  for(const L in composed){
+    const c=composed[L]; if(!c) continue;
+    for(const f of clientFields){
+      if(f in c) c[f]=stripAgeDeep(c[f]);
+    }
+  }
+}
 
 function renderInternal(){
   const c=primaryComposed();if(!c)return;
@@ -701,11 +748,13 @@ function renderReport(){
     if(!s)return '<p class="rep-p empty">—</p>';
     return '<p class="rep-p">'+esc(s)+'</p>';
   };
-  const platCardsFor=tt=>STATE.links.filter(l=>l.foll||l.eng).map(l=>{
+  const platCardsFor=tt=>STATE.links.filter(l=>l.url||l.foll||l.eng).map(l=>{
     const p=PLATFORM_BY_ID[l.platform]||{name:l.platform,color:'#8a8579',abbr:'·'};
     const stats=[l.foll&&(esc(l.foll)+' '+tt.foll),l.eng&&(esc(l.eng)+' '+tt.eng)].filter(Boolean).join(' · ');
     const nameLine=esc(p.name)+(l.note?' <span style="color:var(--ink-faint);font-weight:400;font-size:11.5px">· '+esc(l.note)+'</span>':'');
-    return '<div class="pm"><span class="badge" style="background:'+p.color+'">'+p.abbr+'</span><div><div class="pn">'+nameLine+'</div><div class="ps">'+stats+'</div></div></div>';
+    const fallbackLabel = (tt===RL.en)?'link on file':'链接已记录';
+    const statsLine = stats || (l.url?'<span style="color:var(--ink-faint);font-style:normal;font-size:11.5px">'+fallbackLabel+'</span>':'—');
+    return '<div class="pm"><span class="badge" style="background:'+p.color+'">'+p.abbr+'</span><div><div class="pn">'+nameLine+'</div><div class="ps">'+statsLine+'</div></div></div>';
   }).join('');
 
   const bgBlock=(tt,b)=>{
