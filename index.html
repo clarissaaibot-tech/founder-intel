@@ -552,10 +552,27 @@ SUBJECT: ${i.nameEn} ${i.nameCn} — ${i.role} at ${i.company}, ${i.industry}, $
 The "insights" must reference concrete facts from findings.
 For "ipIdeas": 6 categories × exactly 3 ideas. Each idea = clickable title + one-sentence "why" tying to a specific finding fact.
 
-LANGUAGE — STRICT:
-- Write these IN ${langName} (no exceptions, no mixing): lead, background.*, digital, perceptionMarker, perceptionNow, perceptionAim, gapDelta, insights, media, AND every ipIdeas title AND every ipIdeas why field.
-- Write snapshot, perceptionLine, and ALL meetingPrep fields in Simplified Chinese (internal team only).
-- If ${langName} is English: do NOT include any Chinese characters in the public-facing fields above.
+CLIENT-FACING vs INTERNAL fields — CRITICAL:
+The following fields are PUBLIC-FACING (the founder will read them in their PDF report). They must be respectful, dignified, factual, and NEUTRAL-to-POSITIVE in tone:
+  lead, background.*, digital, media
+Rules for these client-facing fields:
+- NEVER mention the founder's age, claimed-vs-actual age gaps, or speculate about timeline inconsistencies in their personal background. Even if findings note it, OMIT from these fields.
+- NEVER include critical, negative, or skeptical framing — no words like "disappointing", "underperformance", "skepticism", "thin", "weak", "below expectations", "controversy", "red flags", "claimed but...", "inconsistency suggests..."
+- Describe events as facts: "IPO listed at 25 sen" — NOT "disappointing 8% loss".
+- Frame financial numbers neutrally — name the deal, the partners, the timeline. Do not editorialize.
+- If a finding is sensitive (age, scandal, regulatory note, family-business questions, market criticism), keep it OUT of client-facing fields entirely. Save it for internal fields below.
+
+The following fields are INTERNAL-ONLY (only the SMTB team sees them on screen, never in the PDF). Here you CAN be candid, critical, analytical:
+  perceptionMarker, perceptionNow, perceptionAim, gapDelta, insights, ipIdeas, snapshot, perceptionLine, meetingPrep
+Rules for these internal fields:
+- Honest analysis is welcome — including sensitive observations, market reads, timeline questions, areas to handle with care.
+- Sensitive observations should go into meetingPrep.sensitive specifically.
+
+LANGUAGE — STRICT, NO EXCEPTIONS:
+- The variable \`langName\` is "${langName}". You MUST write the following fields ENTIRELY in ${langName}: lead, background.origin, background.trajectory, background.moments, background.assets, background.angles, digital, perceptionMarker, perceptionNow, perceptionAim, gapDelta, insights, media, AND every ipIdeas title AND every ipIdeas why field.
+- If ${langName} is "Simplified Chinese": every character in those fields must be Chinese. NO English words, NO English sentences. Brand names and proper nouns can stay in their original form (e.g. "Wawasan Dengkil", "IPO"), but the writing around them must be Chinese.
+- If ${langName} is "English": no Chinese characters in those fields.
+- Write snapshot, perceptionLine, and ALL meetingPrep fields in Simplified Chinese ALWAYS (internal team only, regardless of report language).
 
 FORMAT — STRICT:
 - Fields marked as ARRAY must be arrays of short bullet points (2–4 items, each one sentence, max 20 words). Never write paragraphs in array fields.
@@ -730,7 +747,7 @@ function renderReport(){
       '<img class="logo-img" src="/smtb-logo-dark.png" alt="SMTB Media">'+
     '</div>'+
     '<div class="rep-hero">'+
-      '<div class="rep-kicker">'+tH.tagline+' · '+new Date().toLocaleDateString(tH.dateLoc,{year:'numeric',month:'long',day:'numeric'})+'</div>'+
+      '<div class="rep-kicker">'+tH.tagline+'</div>'+
       '<h1 class="rep-name">'+nameLine+'</h1>'+
       '<div class="rep-meta">'+(meta||'—')+'</div>'+
       '<p class="rep-lead">'+(esc(cH.lead)||'')+'</p>'+
@@ -777,9 +794,9 @@ async function downloadPDF(){
       '.rep-hero{padding:24px 0 24px 0 !important;background:transparent !important}'+
       '.lang-divider{padding:12px 16mm !important;margin:0 -16mm !important;background:var(--night) !important;border-top:1px solid var(--gold) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
 
-      // Disclaimer (small print before finale)
-      '.disclaimer{padding:18px 0 !important;margin-top:8mm !important;border-top:1px dashed var(--line) !important;font-size:10.5px;line-height:1.55;color:var(--ink-faint);font-style:italic;max-width:80ch}'+
-      '.disclaimer strong{font-weight:600;font-style:normal;color:var(--gold-deep);text-transform:uppercase;letter-spacing:.1em;font-size:9.5px;display:block;margin-bottom:4px}'+
+      // Disclaimer — legal footnote style. Inset from main content, subtle frame, justified text. NOTE: do NOT use font-style:italic — it triggers character-reversal in some Chinese fonts when printed to PDF.
+      '.disclaimer{padding:20px 24px !important;margin:8mm 12mm 0 12mm !important;border:1px solid var(--line) !important;border-top:2px solid var(--gold) !important;background:#fff !important;font-size:10.5px;line-height:1.7;color:var(--ink-soft);font-style:normal !important;text-align:justify;direction:ltr !important;unicode-bidi:isolate !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+      '.disclaimer strong{font-weight:700;font-style:normal !important;color:var(--gold-deep);text-transform:uppercase;letter-spacing:.16em;font-size:9.5px;display:block;margin-bottom:8px;text-align:left;direction:ltr !important}'+
 
       // KEEP-TOGETHER — only fine-grained items.
       '.bg-card,.ip-idea,.bullets li,.list li,.gapcard,.delta,.marker,.plat-mini .pm{break-inside:avoid !important;page-break-inside:avoid !important}'+
@@ -791,8 +808,8 @@ async function downloadPDF(){
       '.ip-cat{break-inside:auto !important;page-break-inside:auto !important}'+
       '.rep-lead{break-inside:avoid !important;page-break-inside:avoid !important}'+
 
-      // Finale page — full-bleed navy. @page is margin 0 so finale fills the sheet via min-height; only L/R negative margin to escape .report L/R padding.
-      '.last-page-finale{break-before:page;page-break-before:always;background:#030E22 !important;color:#fff;padding:80px 16mm !important;margin:0 -16mm !important;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left;border-top:3px solid #FEB736;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+      // Finale page — full-bleed navy. Generous padding so slogan doesn't hug the edge.
+      '.last-page-finale{break-before:page;page-break-before:always;background:#030E22 !important;color:#fff;padding:80px 28mm !important;margin:0 -16mm !important;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left;border-top:3px solid #FEB736;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
       '.last-page-finale .finale-slogan{font-family:Cormorant Garamond,Noto Serif SC,serif;font-style:italic;font-size:34px;line-height:1.35;color:#fff;margin:0 0 40px;max-width:22ch}'+
       '.last-page-finale .finale-logo{height:72px;width:auto;display:block}'+
 
