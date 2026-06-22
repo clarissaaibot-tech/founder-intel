@@ -57,12 +57,31 @@ button{font-family:inherit;cursor:pointer}input,textarea,select{font-family:inhe
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--night);box-shadow:0 0 0 2px rgba(254,183,54,.2)}
 .field textarea{resize:vertical;min-height:64px;line-height:1.5}
 
-.linkrow{display:grid;grid-template-columns:140px 1fr 96px 100px;gap:12px;align-items:center;margin-bottom:10px}
-.linkrow .pl{display:flex;align-items:center;gap:11px;font-weight:500;font-size:13.5px}
-.linkrow .badge{width:30px;height:30px;border-radius:2px;display:grid;place-items:center;color:#fff;font-family:var(--body);font-weight:700;font-size:10.5px;letter-spacing:.04em}
-.linkrow input{border:1px solid var(--line);border-radius:2px;padding:9px 11px;font-size:13px;background:#fff}
-.linkrow .hint{font-size:9.5px;color:var(--ink-faint);font-family:var(--body);text-align:center;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
-@media(max-width:640px){.linkrow{grid-template-columns:1fr 1fr;gap:8px}.linkrow .pl{grid-column:1/-1}}
+.links-head{display:grid;grid-template-columns:140px 1fr 1.4fr 90px 90px 28px;gap:12px;align-items:center;font-size:9.5px;color:var(--ink-faint);font-family:var(--body);letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding:0 2px 8px;border-bottom:1px solid var(--line-soft);margin-bottom:12px}
+@media(max-width:780px){.links-head{display:none}}
+
+.linkrow{display:grid;grid-template-columns:140px 1fr 1.4fr 90px 90px 28px;gap:12px;align-items:center;margin-bottom:10px;position:relative}
+.linkrow select,.linkrow input{border:1px solid var(--line);border-radius:2px;padding:9px 11px;font-size:13.5px;background:#fff;font-family:var(--body);color:var(--ink);width:100%}
+.linkrow select{font-weight:500;cursor:pointer}
+.linkrow input::placeholder{color:#c4bda9;font-style:italic}
+.linkrow input:focus,.linkrow select:focus{outline:none;border-color:var(--night);box-shadow:0 0 0 2px rgba(254,183,54,.2)}
+.del{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:#fff;display:grid;place-items:center;cursor:pointer;color:var(--ink-faint);font-family:var(--body);font-weight:600;font-size:13px;padding:0;line-height:1;transition:all .15s}
+.del:hover{border-color:#d04040;color:#d04040;background:#fbeaea}
+
+@media(max-width:780px){
+  .linkrow{grid-template-columns:1fr 1fr;gap:8px;padding:14px;border:1px solid var(--line-soft);border-radius:3px;margin-bottom:14px}
+  .linkrow select{grid-column:1/-1}
+  .linkrow input[data-role="url"]{grid-column:1/-1}
+  .linkrow input[data-role="note"]{grid-column:1/-1}
+  .linkrow .del{position:absolute;top:8px;right:8px}
+}
+
+.add-btn{margin-top:14px;border:1px dashed var(--line);background:transparent;color:var(--ink-soft);border-radius:3px;padding:11px 16px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-weight:500;width:100%;justify-content:center;transition:all .15s}
+.add-btn:hover{border-color:var(--gold);border-style:solid;color:var(--gold-deep);background:#fffbf2}
+.add-btn .plus{font-size:18px;line-height:1;font-weight:300}
+
+.links-hint{font-size:11.5px;color:var(--ink-faint);margin-top:14px;line-height:1.55;font-style:italic}
+.links-hint b{font-style:normal;font-weight:600;color:var(--ink-soft)}
 
 .runbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:10px}
 .btn.run{background:var(--night);color:#fff;border-color:var(--night)}
@@ -92,6 +111,37 @@ button{font-family:inherit;cursor:pointer}input,textarea,select{font-family:inhe
 .prep ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.55}
 .prep ul li{margin-bottom:5px}
 .prep p{margin:0;font-size:13.5px}
+
+.int-divider{margin:28px 0 18px;padding-top:18px;border-top:1px dashed var(--line);font-family:var(--body);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);font-weight:700}
+.int-block{margin-bottom:24px}
+.int-block:last-child{margin-bottom:0}
+.int-h{font-family:var(--display);font-size:18px;font-weight:600;color:var(--night);margin:0 0 12px;letter-spacing:-.005em}
+.int-marker{font-family:var(--display);font-size:18px;font-style:italic;line-height:1.45;color:var(--night);padding-left:14px;border-left:2px solid var(--gold);margin:0 0 12px}
+.int-eyebrow{font-family:var(--body);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin:0 0 6px}
+.int-gap{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:14px}
+@media(max-width:640px){.int-gap{grid-template-columns:1fr}}
+.int-gap>div{background:var(--paper);border:1px solid var(--line);padding:13px 15px;border-radius:3px}
+.int-delta{background:#fbf5e6;border:1px solid #ebdda5;border-left:3px solid var(--gold);padding:12px 15px;border-radius:0}
+.int-delta p,.int-gap p{margin:0}
+.int-block .bullets li{font-size:13.5px;line-height:1.55;margin-bottom:6px}
+.int-block .bullets li::before{top:11px}
+.int-list{margin:0;padding:0;list-style:none;counter-reset:n}
+.int-list li{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:flex-start;margin-bottom:10px;font-size:13.5px;line-height:1.55}
+.int-list li::before{counter-increment:n;content:counter(n,decimal-leading-zero);font-family:var(--display);font-style:italic;font-weight:500;font-size:14px;color:var(--gold-deep);padding-top:1px}
+.int-ip{margin-top:4px}
+.int-ip-cat{margin-bottom:18px}
+.int-ip-cat:last-child{margin-bottom:0}
+.int-ip-head{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--line-soft)}
+.int-ip-num{font-family:var(--body);font-size:9px;letter-spacing:.18em;font-weight:700;color:var(--gold-deep);text-transform:uppercase}
+.int-ip-label{font-family:var(--display);font-size:15px;font-weight:600;color:var(--night)}
+.int-ip-desc{font-size:11px;color:var(--ink-faint);font-style:italic;margin-left:auto}
+.int-ip-list{margin:0;padding:0;list-style:none}
+.int-ip-list li{padding:8px 0;border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:24px 1fr;gap:10px}
+.int-ip-list li:last-child{border-bottom:0}
+.int-ip-list .num{font-family:var(--display);font-style:italic;font-size:13px;color:var(--gold-deep);font-weight:500}
+.int-ip-list .ttl{font-family:var(--body);font-size:13.5px;font-weight:600;color:var(--night);line-height:1.4;margin:0 0 3px}
+.int-ip-list .why{font-size:12px;color:var(--ink-soft);line-height:1.5;margin:0}
+.int-ip-list .why .lbl{font-family:var(--body);font-size:9px;font-weight:700;color:var(--gold-deep);letter-spacing:.12em;text-transform:uppercase;margin-right:6px}
 
 .eyebrow-top{font-family:var(--body);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 5px;font-weight:700}
 .editnote{font-size:11.5px;color:var(--ink-faint);margin:0 0 16px;font-style:italic}
@@ -234,15 +284,26 @@ button{font-family:inherit;cursor:pointer}input,textarea,select{font-family:inhe
 
     <div class="block">
       <div class="block-head"><span class="block-num">02</span><h2 class="block-title">社交链接 & 私有数据</h2></div>
-      <p class="block-sub">贴上链接供自动调查。Follower / engagement 无法自动抓取——请登入后手动填(可选)。</p>
-      <div id="links">
-        <div class="linkrow"><span class="pl"><span class="badge" style="background:#2D64BC">in</span>LinkedIn</span><input data-link="li" placeholder="https://…"><input data-foll="li" placeholder="—"><input data-eng="li" placeholder="—"></div>
-        <div class="linkrow"><span class="pl"><span class="badge" style="background:#030E22">X</span>X / Twitter</span><input data-link="x" placeholder="https://…"><input data-foll="x" placeholder="—"><input data-eng="x" placeholder="—"></div>
-        <div class="linkrow"><span class="pl"><span class="badge" style="background:#C8377B">IG</span>Instagram</span><input data-link="ig" placeholder="https://…"><input data-foll="ig" placeholder="—"><input data-eng="ig" placeholder="—"></div>
-        <div class="linkrow"><span class="pl"><span class="badge" style="background:#C8261C">YT</span>YouTube</span><input data-link="yt" placeholder="https://…"><input data-foll="yt" placeholder="—"><input data-eng="yt" placeholder="—"></div>
-        <div class="linkrow"><span class="pl"><span class="badge" style="background:#11A8A0">TT</span>TikTok</span><input data-link="tt" placeholder="https://…"><input data-foll="tt" placeholder="—"><input data-eng="tt" placeholder="—"></div>
-        <div class="linkrow" style="margin-top:2px"><span class="pl"></span><span class="hint">链接</span><span class="hint">粉丝</span><span class="hint">互动率</span></div>
+      <p class="block-sub">每加一个链接按「+ 加链接」。同一平台多账号(例:公司 IG + 个人 IG)分两行填,「备注」栏写清楚。Follower / engagement 是手动填的。</p>
+
+      <div class="links-head">
+        <span>平台</span>
+        <span>备注（选填）</span>
+        <span>链接</span>
+        <span>粉丝</span>
+        <span>互动率</span>
+        <span></span>
       </div>
+
+      <div id="links"></div>
+
+      <button class="add-btn" type="button" onclick="if(window.addLinkRow)addLinkRow()">
+        <span class="plus">＋</span> 加链接
+      </button>
+
+      <p class="links-hint">
+        <b>提示:</b> 备注栏写「公司主账号」「个人 · 中文」「停更」之类,会喂给 AI 当上下文,让它知道哪个账号是主要的。
+      </p>
     </div>
 
     <div class="block">
@@ -269,11 +330,44 @@ button{font-family:inherit;cursor:pointer}input,textarea,select{font-family:inhe
       <span class="tagline"><span class="dot"></span>内部专用 · 不进下载档</span>
       <p class="snapshot" id="r_snapshot"></p>
       <p class="subline" id="r_perceptionLine"></p>
+
       <div class="ice-lead"><h4>🧊 破冰话题（开场先看这个）</h4><ul id="r_ice"></ul></div>
       <div class="prep-grid">
         <div class="prep"><h4>该问的聪明问题</h4><ul id="r_q"></ul></div>
         <div class="prep"><h4>小心处理</h4><ul id="r_sens"></ul></div>
         <div class="prep"><h4>可能的共同点</h4><p id="r_mutual"></p></div>
+      </div>
+
+      <div class="int-divider">SMTB 内部分析</div>
+
+      <div class="int-block">
+        <h4 class="int-h">公众观感</h4>
+        <p class="int-marker" id="r_marker"></p>
+        <div id="r_percNow"></div>
+      </div>
+
+      <div class="int-block">
+        <h4 class="int-h">差距与机会</h4>
+        <div class="int-gap">
+          <div><p class="int-eyebrow">目前被看成</p><div id="r_gPercNow"></div></div>
+          <div><p class="int-eyebrow">其实可以拥有</p><div id="r_gPercAim"></div></div>
+        </div>
+        <div class="int-delta"><p class="int-eyebrow">差距 · 我们的范围</p><div id="r_gDelta"></div></div>
+      </div>
+
+      <div class="int-block">
+        <h4 class="int-h">我们注意到</h4>
+        <ul id="r_insights" class="int-list"></ul>
+      </div>
+
+      <div class="int-block">
+        <h4 class="int-h">可挖的角度</h4>
+        <ul id="r_angles" class="int-list"></ul>
+      </div>
+
+      <div class="int-block">
+        <h4 class="int-h">为他想的内容方向</h4>
+        <div id="r_ipIdeas"></div>
       </div>
     </div>
 
@@ -312,12 +406,19 @@ const IP_CATS=[
 ];
 
 const PLATFORMS=[
-  {id:'li',name:'LinkedIn',color:'#2D64BC',abbr:'in'},
-  {id:'x',name:'X / Twitter',color:'#030E22',abbr:'X'},
-  {id:'ig',name:'Instagram',color:'#C8377B',abbr:'IG'},
-  {id:'yt',name:'YouTube',color:'#C8261C',abbr:'YT'},
-  {id:'tt',name:'TikTok',color:'#11A8A0',abbr:'TT'}
+  {id:'instagram',name:'Instagram',  color:'#C8377B',abbr:'IG'},
+  {id:'facebook', name:'Facebook',   color:'#1877F2',abbr:'FB'},
+  {id:'youtube',  name:'YouTube',    color:'#C8261C',abbr:'YT'},
+  {id:'tiktok',   name:'TikTok',     color:'#11A8A0',abbr:'TT'},
+  {id:'threads',  name:'Threads',    color:'#030E22',abbr:'TH'},
+  {id:'linkedin', name:'LinkedIn',   color:'#2D64BC',abbr:'in'},
+  {id:'x',        name:'X / Twitter',color:'#030E22',abbr:'X'},
+  {id:'xhs',      name:'小红书',     color:'#FE2C55',abbr:'XHS'},
+  {id:'weibo',    name:'微博',       color:'#E6162D',abbr:'WB'},
+  {id:'website',  name:'网站 / Blog',color:'#3a4558',abbr:'WEB'},
+  {id:'other',    name:'其他',       color:'#8a8579',abbr:'···'}
 ];
+const PLATFORM_BY_ID = Object.fromEntries(PLATFORMS.map(p=>[p.id,p]));
 const $=s=>document.querySelector(s);
 const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const STATE={input:{},links:{},composed:null,research:null};
@@ -358,21 +459,62 @@ function parseJSON(txt){
 function gather(){
   const v=id=>$('#'+id).value.trim();
   STATE.input={nameEn:v('i_nameEn'),nameCn:v('i_nameCn'),company:v('i_company'),role:v('i_role'),industry:v('i_industry'),stage:v('i_stage'),location:v('i_location'),website:v('i_website'),outLang:$('#i_outLang').value,seed:v('i_seed')};
-  STATE.links={};
-  PLATFORMS.forEach(p=>{STATE.links[p.id]={url:document.querySelector('[data-link="'+p.id+'"]').value.trim(),foll:document.querySelector('[data-foll="'+p.id+'"]').value.trim(),eng:document.querySelector('[data-eng="'+p.id+'"]').value.trim()};});
+  STATE.links=[];
+  document.querySelectorAll('#links .linkrow').forEach(row=>{
+    const pid=row.querySelector('[data-role="platform"]').value;
+    const note=row.querySelector('[data-role="note"]').value.trim();
+    const url =row.querySelector('[data-role="url"]').value.trim();
+    const foll=row.querySelector('[data-role="foll"]').value.trim();
+    const eng =row.querySelector('[data-role="eng"]').value.trim();
+    if(url||foll||eng||note) STATE.links.push({platform:pid,note,url,foll,eng});
+  });
 }
+
+// Cycle through note examples to make it clear that the field is for distinguishing accounts
+const NOTE_EXAMPLES=['例：个人','例：公司主账号','例：中文账号','例：英文账号','例：旧账号','例：联系频道'];
+function makeLinkRow(idx){
+  const div=document.createElement('div');
+  div.className='linkrow';
+  const opts=PLATFORMS.map(p=>'<option value="'+p.id+'">'+p.name+'</option>').join('');
+  const noteHint=NOTE_EXAMPLES[(idx||0)%NOTE_EXAMPLES.length];
+  div.innerHTML =
+    '<select data-role="platform">'+opts+'</select>'+
+    '<input data-role="note" placeholder="'+noteHint+'">'+
+    '<input data-role="url"  placeholder="https://…">'+
+    '<input data-role="foll" placeholder="—">'+
+    '<input data-role="eng"  placeholder="—">'+
+    '<button class="del" type="button" title="删除" onclick="this.parentElement.remove();updateLinkDelButtons()">✕</button>';
+  return div;
+}
+function addLinkRow(){
+  const container=document.getElementById('links');
+  const idx=container.querySelectorAll('.linkrow').length;
+  container.appendChild(makeLinkRow(idx));
+  updateLinkDelButtons();
+}
+function updateLinkDelButtons(){
+  const rows=document.querySelectorAll('#links .linkrow');
+  rows.forEach(r=>{const b=r.querySelector('.del');if(b)b.style.visibility=(rows.length>1)?'visible':'hidden';});
+}
+window.addLinkRow=addLinkRow;
+window.updateLinkDelButtons=updateLinkDelButtons;
 
 async function run(){
   gather();
   const i=STATE.input;
-  if(!(i.nameEn||i.nameCn)||!Object.values(STATE.links).some(l=>l.url)){
+  if(!(i.nameEn||i.nameCn)||!STATE.links.some(l=>l.url)){
     $('#status').innerHTML='<span style="color:#a63b08">至少填写姓名和一个链接。</span>';return;
   }
   const btn=$('#btnRun');btn.disabled=true;
   const setStatus=(t,sp)=>$('#status').innerHTML=(sp?'<span class="spinner"></span>':'')+esc(t);
   try{
     setStatus('正在调查公开网络…',true);
-    const linkList=PLATFORMS.filter(p=>STATE.links[p.id].url).map(p=>p.name+': '+STATE.links[p.id].url).join('\n');
+    const linkList=STATE.links.filter(l=>l.url).map(l=>{
+      const p=PLATFORM_BY_ID[l.platform]||{name:l.platform};
+      const label=p.name + (l.note?(' ('+l.note+')'):'');
+      const stats=[l.foll&&(l.foll+' followers'), l.eng&&(l.eng+' engagement')].filter(Boolean).join(', ');
+      return label+': '+l.url + (stats?' — '+stats:'');
+    }).join('\n');
     const rPrompt=`Investigate this founder using web search. Goal: understand their PAST so the meeting team grasps who they are in 2 minutes. Be specific and factual.
 
 Person: ${i.nameEn} ${i.nameCn?'(Chinese: '+i.nameCn+')':''}
@@ -480,6 +622,46 @@ function renderInternal(){
   $('#r_q').innerHTML=ul(mp.questions);
   $('#r_sens').innerHTML=ul(mp.sensitive);
   $('#r_mutual').textContent=mp.mutual||'—';
+
+  // Helper to render either string or array as bullets (always internal Chinese context)
+  const renderBullets=(val)=>{
+    if(Array.isArray(val)){
+      const items=val.filter(x=>x&&String(x).trim());
+      if(!items.length)return '<p class="empty">—</p>';
+      return '<ul class="bullets">'+items.map(x=>'<li>'+esc(String(x))+'</li>').join('')+'</ul>';
+    }
+    const s=(val==null?'':String(val)).trim();
+    return s?'<p style="margin:0;font-size:13.5px;line-height:1.55">'+esc(s)+'</p>':'<p class="empty">—</p>';
+  };
+
+  // Perception
+  $('#r_marker').textContent=c.perceptionMarker?('“'+c.perceptionMarker+'”'):'';
+  $('#r_percNow').innerHTML=renderBullets(c.perceptionNow);
+
+  // Gap
+  $('#r_gPercNow').innerHTML=renderBullets(c.perceptionNow);
+  $('#r_gPercAim').innerHTML=renderBullets(c.perceptionAim);
+  $('#r_gDelta').innerHTML=renderBullets(c.gapDelta);
+
+  // Insights
+  const ins=(c.insights||[]).filter(Boolean);
+  $('#r_insights').innerHTML=ins.length?ins.map(x=>'<li><span>'+esc(x)+'</span></li>').join(''):'<li class="empty">—</li>';
+
+  // Angles (from background — was previously in PDF, now internal only)
+  const angles=((c.background||{}).angles||[]).filter(Boolean);
+  $('#r_angles').innerHTML=angles.length?angles.map(x=>'<li><span>'+esc(x)+'</span></li>').join(''):'<li class="empty">—</li>';
+
+  // IP ideas — show all 6 categories
+  const ip=c.ipIdeas||{};
+  $('#r_ipIdeas').innerHTML='<div class="int-ip">'+IP_CATS.map((cat,n)=>{
+    const ideas=(ip[cat.key]||[]).filter(x=>x&&(x.title||x.why));
+    if(!ideas.length)return '';
+    const num=String(n+1).padStart(2,'0');
+    return '<div class="int-ip-cat">'+
+      '<div class="int-ip-head"><span class="int-ip-num">'+num+'</span><span class="int-ip-label">'+cat.zh+'</span><span class="int-ip-desc">'+cat.descZh+'</span></div>'+
+      '<ul class="int-ip-list">'+ideas.map((x,k)=>'<li><span class="num">'+String(k+1).padStart(2,'0')+'</span><div><h4 class="ttl">'+esc(x.title||'')+'</h4>'+(x.why?'<p class="why"><span class="lbl">为什么适合他</span>'+esc(x.why)+'</p>':'')+'</div></li>').join('')+'</ul>'+
+    '</div>';
+  }).filter(Boolean).join('')+'</div>';
 }
 
 function renderReport(){
@@ -502,10 +684,11 @@ function renderReport(){
     if(!s)return '<p class="rep-p empty">—</p>';
     return '<p class="rep-p">'+esc(s)+'</p>';
   };
-  const platCardsFor=tt=>PLATFORMS.filter(p=>STATE.links[p.id].foll||STATE.links[p.id].eng).map(p=>{
-    const d=STATE.links[p.id];
-    const stats=[d.foll&&(esc(d.foll)+' '+tt.foll),d.eng&&(esc(d.eng)+' '+tt.eng)].filter(Boolean).join(' · ');
-    return '<div class="pm"><span class="badge" style="background:'+p.color+'">'+p.abbr+'</span><div><div class="pn">'+p.name+'</div><div class="ps">'+stats+'</div></div></div>';
+  const platCardsFor=tt=>STATE.links.filter(l=>l.foll||l.eng).map(l=>{
+    const p=PLATFORM_BY_ID[l.platform]||{name:l.platform,color:'#8a8579',abbr:'·'};
+    const stats=[l.foll&&(esc(l.foll)+' '+tt.foll),l.eng&&(esc(l.eng)+' '+tt.eng)].filter(Boolean).join(' · ');
+    const nameLine=esc(p.name)+(l.note?' <span style="color:var(--ink-faint);font-weight:400;font-size:11.5px">· '+esc(l.note)+'</span>':'');
+    return '<div class="pm"><span class="badge" style="background:'+p.color+'">'+p.abbr+'</span><div><div class="pn">'+nameLine+'</div><div class="ps">'+stats+'</div></div></div>';
   }).join('');
 
   const bgBlock=(tt,b)=>{
@@ -515,7 +698,6 @@ function renderReport(){
     if(b.trajectory) items.push('<div class="bg-card"><h5>'+tt.secTrajectory+'</h5>'+renderField(b.trajectory,'p')+'</div>');
     if(b.moments&&b.moments.length) items.push('<div class="bg-card"><h5>'+tt.secMoments+'</h5><ul>'+b.moments.filter(Boolean).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>');
     if(b.assets)     items.push('<div class="bg-card"><h5>'+tt.secAssets+'</h5>'+renderField(b.assets,'p')+'</div>');
-    if(b.angles&&b.angles.length) items.push('<div class="bg-card"><h5>'+tt.secAngles+'</h5><ul>'+b.angles.filter(Boolean).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>');
     return '<div class="bg-grid">'+items.join('')+'</div>';
   };
 
@@ -540,10 +722,6 @@ function renderReport(){
     return divider+
       '<div class="rep-section"><h3 class="rep-h">'+tt.secBg+'</h3>'+bgBlock(tt,c.background)+'</div>'+
       '<div class="rep-section"><h3 class="rep-h">'+tt.secDigital+'</h3>'+renderField(c.digital,'p')+(platCardsFor(tt)?'<div class="plat-mini">'+platCardsFor(tt)+'</div>':'')+'</div>'+
-      '<div class="rep-section"><h3 class="rep-h">'+tt.secPerc+'</h3>'+(c.perceptionMarker?'<p class="marker">'+esc(c.perceptionMarker)+'</p>':'')+renderField(c.perceptionNow,'p')+'</div>'+
-      '<div class="rep-section"><h3 class="rep-h">'+tt.secGap+'</h3><div class="rep-gap"><div class="gapcard"><p class="eyebrow">'+tt.percNow+'</p>'+renderField(c.perceptionNow,'p')+'</div><div class="gapcard aim"><p class="eyebrow">'+tt.percAim+'</p>'+renderField(c.perceptionAim,'p')+'</div></div>'+(c.gapDelta?'<div class="delta"><p class="eyebrow">'+tt.deltaLabel+'</p>'+renderField(c.gapDelta,'p')+'</div>':'')+'</div>'+
-      '<div class="rep-section"><h3 class="rep-h">'+tt.secInsight+'</h3>'+list(c.insights)+'</div>'+
-      '<div class="rep-section"><h3 class="rep-h">'+tt.secIP+'</h3>'+ipBlock(tt,L,c.ipIdeas)+'</div>'+
       '<div class="rep-section"><h3 class="rep-h">'+tt.secMedia+'</h3>'+renderField(c.media,'p')+'</div>';
   };
 
@@ -570,26 +748,38 @@ async function downloadPDF(){
     const css=document.querySelector('style').innerHTML;
     const slogan=(RL[STATE.input.outLang==='en'?'en':'zh']||RL.zh).slogan;
     const reportHTML=$('#report').outerHTML;
-    const lastPage='<div class="last-page-finale"><p class="finale-slogan">'+esc(slogan)+'</p><img src="/smtb-logo-dark.png" class="finale-logo" alt="SMTB"></div>';
+    const disclaimerZh='本报告由 SMTB Media 的内部研究工具自动汇编,来源为公开网络资料。所有信息可能存在准确性偏差,包括但不限于姓名混淆、时间线错误、媒体引述偏差等。请于会面前核实关键事实。本报告不构成对所述人物或公司的正式背书。';
+    const disclaimerEn='This report is auto-compiled by the SMTB Media internal research tool from publicly available online sources. Information may contain inaccuracies — including name collisions, timeline errors, and misquoted media. Please verify key facts before the meeting. This report does not constitute formal endorsement of the subject or their company.';
+    const disclaimerText=(STATE.input.outLang==='en')?disclaimerEn:disclaimerZh;
+    const disclaimerLabel=(STATE.input.outLang==='en')?'Disclaimer':'免责声明';
+    const disclaimer='<div class="rep-section"><div class="disclaimer"><strong>'+disclaimerLabel+'</strong>'+disclaimerText+'</div></div>';
+    const lastPage=disclaimer+'<div class="last-page-finale"><p class="finale-slogan">'+esc(slogan)+'</p><img src="/smtb-logo-dark.png" class="finale-logo" alt="SMTB"></div>';
 
     const printHTML=
       '<!doctype html><html lang="zh"><head><meta charset="utf-8"><title>SMTB_'+nm+'_report</title>'+
       '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">'+
       '<style>'+css+
-      // FULL-BLEED everywhere — @page margin 0 so navy finale can truly fill the page edge-to-edge. For content pages, the cream html background + section padding provides breathing room (continuation pages will have less top space but this is the unavoidable trade-off for unified backgrounds).
+      // STRATEGY: @page margin 0 — works perfectly with Chrome\'s "Margins: None" setting.
+      // All visual padding lives INSIDE the content. The cream html bg paints the full sheet.
+      // Finale uses position:absolute on a wrapper sized to 100vw x 100vh, escaping all parent padding.
       '@page{size:A4;margin:0 !important}'+
       'html{background:#F8F6F2 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
       'body{margin:0 !important;padding:0 !important;background:#F8F6F2 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
-      '.report{max-width:none !important;margin:0 !important;border:0 !important;border-radius:0 !important;background:transparent !important;padding:18mm 16mm !important}'+
+      '.report{max-width:none !important;margin:0 !important;border:0 !important;border-radius:0 !important;background:transparent !important;padding:0 16mm !important}'+
 
-      // Sections: vertical padding throughout — gives breathing room when pages continue mid-content
-      '.rep-section{padding:22px 0 !important;border-top:1px solid var(--line-soft) !important;background:transparent !important}'+
+      // Vertical rhythm — generous so even continuation pages have visual air
+      '.rep-section{padding:30px 0 !important;border-top:1px solid var(--line-soft) !important;background:transparent !important}'+
       '.rep-section:first-of-type{border-top:0 !important;padding-top:0 !important}'+
+      '.rep-section:last-of-type{padding-bottom:20mm !important}'+ // last content section has extra bottom space
 
-      // Dark banners: escape wrapper L/R padding via negative margin (16mm)
-      '.rep-hero-banner{padding:22px 16mm !important;margin:-18mm -16mm 0 -16mm !important;background:var(--night) !important;border-bottom:3px solid var(--gold) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+      // Dark banners — bleed L/R only (top of hero-banner naturally sits at sheet top because no @page margin)
+      '.rep-hero-banner{padding:22px 16mm !important;margin:0 -16mm !important;background:var(--night) !important;border-bottom:3px solid var(--gold) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
       '.rep-hero{padding:24px 0 24px 0 !important;background:transparent !important}'+
       '.lang-divider{padding:12px 16mm !important;margin:0 -16mm !important;background:var(--night) !important;border-top:1px solid var(--gold) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+
+      // Disclaimer (small print before finale)
+      '.disclaimer{padding:18px 0 !important;margin-top:8mm !important;border-top:1px dashed var(--line) !important;font-size:10.5px;line-height:1.55;color:var(--ink-faint);font-style:italic;max-width:80ch}'+
+      '.disclaimer strong{font-weight:600;font-style:normal;color:var(--gold-deep);text-transform:uppercase;letter-spacing:.1em;font-size:9.5px;display:block;margin-bottom:4px}'+
 
       // KEEP-TOGETHER — only fine-grained items.
       '.bg-card,.ip-idea,.bullets li,.list li,.gapcard,.delta,.marker,.plat-mini .pm{break-inside:avoid !important;page-break-inside:avoid !important}'+
@@ -601,8 +791,8 @@ async function downloadPDF(){
       '.ip-cat{break-inside:auto !important;page-break-inside:auto !important}'+
       '.rep-lead{break-inside:avoid !important;page-break-inside:avoid !important}'+
 
-      // Finale page — full-bleed navy. @page is margin 0, finale fills entire sheet via min-height + negative margin to escape report wrapper padding.
-      '.last-page-finale{break-before:page;page-break-before:always;background:#030E22 !important;color:#fff;padding:80px 16mm !important;margin:-18mm -16mm !important;min-height:calc(100vh + 36mm);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left;border-top:3px solid #FEB736;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+      // Finale page — full-bleed navy. @page is margin 0 so finale fills the sheet via min-height; only L/R negative margin to escape .report L/R padding.
+      '.last-page-finale{break-before:page;page-break-before:always;background:#030E22 !important;color:#fff;padding:80px 16mm !important;margin:0 -16mm !important;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left;border-top:3px solid #FEB736;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
       '.last-page-finale .finale-slogan{font-family:Cormorant Garamond,Noto Serif SC,serif;font-style:italic;font-size:34px;line-height:1.35;color:#fff;margin:0 0 40px;max-width:22ch}'+
       '.last-page-finale .finale-logo{height:72px;width:auto;display:block}'+
 
@@ -624,11 +814,13 @@ async function downloadPDF(){
 }
 
 function showView(v){$('#inputView').classList.toggle('on',v==='input');$('#resultView').classList.toggle('on',v==='result');window.scrollTo(0,0);}
-function resetAll(){document.querySelectorAll('input,textarea').forEach(el=>el.value='');$('#i_outLang').value='zh';STATE.composed=null;STATE.research=null;$('#btnPdf').disabled=true;$('#status').innerHTML='';showView('input');}
+function resetAll(){document.querySelectorAll('input,textarea').forEach(el=>el.value='');$('#i_outLang').value='zh';STATE.composed=null;STATE.research=null;STATE.links=[];$('#btnPdf').disabled=true;$('#status').innerHTML='';document.getElementById('links').innerHTML='';addLinkRow();addLinkRow();showView('input');}
 try{$('#btnRun').addEventListener('click',run);}catch(e){}
 try{$('#btnPdf').addEventListener('click',downloadPDF);}catch(e){}
 try{$('#btnNew').addEventListener('click',resetAll);}catch(e){}
 window.run=run;window.downloadPDF=downloadPDF;window.resetAll=resetAll;
+// initial link rows
+try{ addLinkRow(); addLinkRow(); }catch(e){console.error('init rows failed',e);}
 var _jw=document.getElementById('jsWarn');if(_jw)_jw.style.display='none';
 </script>
 </body>
